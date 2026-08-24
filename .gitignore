@@ -7,13 +7,15 @@ __pycache__/
 *.so
 
 # Visual Studio Code
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 !*.code-workspace
+settings.json
+
 
 # Built Visual Studio Code Extensions
 *.vsix
@@ -154,6 +156,7 @@ dmypy.json
 cython_debug/
 
 ### PyCharm ####################################
+.idea/
 
 # User-specific stuff
 .idea/**/workspace.xml
@@ -274,3 +277,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# SQLTools VSCode Extension
+*.session.sql
+
+# Claude stuff
+.claude/
+
+# UV Stuff
+uv.lock
+
+# VSCode Spell Checker
+cspell.json

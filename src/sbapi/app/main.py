@@ -1,5 +1,13 @@
-def main():
-    print("Hello World")
+"""_summary_
+    Entry point for SBAPI.
+"""
+from flask import Flask
 
-if __name__ == "__main__":
-    main()
+
+def create_app() -> Flask:
+    """__summary__
+    creates the application entry point
+    """
+    app = Flask(__name__)
+
+    return app

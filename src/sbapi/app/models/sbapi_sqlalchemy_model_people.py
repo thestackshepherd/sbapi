@@ -8,9 +8,11 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 class Base(DeclarativeBase):
     pass
 
+
 class People(Base):
     """people database table model"""
-    __tablename__ = 'people'
+
+    __tablename__ = "people"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String)

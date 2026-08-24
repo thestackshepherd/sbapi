@@ -1,2 +1,2 @@
 # sbapi
-Spaceballs API (SBAPI)
+Spaceballs API (SBAPI) is the SpaceBalls API.
