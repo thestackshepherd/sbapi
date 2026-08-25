@@ -289,3 +289,6 @@ uv.lock
 
 # VSCode Spell Checker
 cspell.json
+
+# claude 
+claude.md
