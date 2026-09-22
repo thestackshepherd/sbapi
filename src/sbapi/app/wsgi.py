@@ -2,7 +2,7 @@ import os
 
 from gunicorn.app.base import BaseApplication
 
-from sbapi.app.main import create_app
+from sbapi.main import create_app
 
 app = create_app()
 

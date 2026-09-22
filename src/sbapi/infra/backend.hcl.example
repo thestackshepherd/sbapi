@@ -1,0 +1,8 @@
+# Copy to backend.hcl (gitignored) and fill in with real values, then:
+#   terraform init -backend-config=backend.hcl
+
+bucket         = "sbapi-terraform-state"
+key            = "sbapi/terraform.tfstate"
+region         = "us-east-1"
+dynamodb_table = "sbapi-terraform-locks"
+encrypt        = true
