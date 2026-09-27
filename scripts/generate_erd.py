@@ -26,6 +26,22 @@ REFERENCES_RE = re.compile(r"REFERENCES\s+(\w+)\s*\(", re.IGNORECASE)
 
 TABLE_LEVEL_CONSTRAINT_PREFIXES = ("UNIQUE", "CHECK", "PRIMARY KEY", "FOREIGN KEY")
 
+# Mirrors the comment-block groupings already used in sbapidatabase_schema.sql
+# (Character Table(s):, Location Table(s):, etc). Checked in order, first match wins.
+DOMAINS = [
+    ("Characters", ("characters", "character_")),
+    ("Locations", ("locations", "location_")),
+    ("Factions", ("factions", "faction_")),
+    ("Vehicles", ("vehicles", "vehicle_")),
+    ("Items", ("items", "item_")),
+    ("Media", ("media", "episodes", "episode_", "media_")),
+    ("Actors", ("actors", "actor_")),
+]
+
+# Prevents Mermaid/GitHub from auto-shrinking a diagram to fit the page width,
+# which is what makes a many-entity erDiagram unreadable.
+MERMAID_INIT = "%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%"
+
 SQL_TO_MERMAID_TYPE = {
     "SERIAL": "int",
     "INTEGER": "int",
@@ -129,9 +145,24 @@ def build_relationships(tables: dict[str, Table]) -> list[tuple[str, str, str, b
     return relationships
 
 
-def render_mermaid(tables: dict[str, Table], relationships: list[tuple[str, str, str, bool]]) -> str:
-    lines = ["erDiagram"]
-    for table in sorted(tables.values(), key=lambda t: t.name):
+def assign_domain(table_name: str) -> str:
+    for domain_name, prefixes in DOMAINS:
+        if any(table_name == p or table_name.startswith(p) for p in prefixes):
+            return domain_name
+    return "Other"
+
+
+def group_by_domain(tables: dict[str, Table]) -> dict[str, list[Table]]:
+    groups: dict[str, list[Table]] = {name: [] for name, _ in DOMAINS}
+    groups["Other"] = []
+    for table in tables.values():
+        groups[assign_domain(table.name)].append(table)
+    return {name: sorted(members, key=lambda t: t.name) for name, members in groups.items() if members}
+
+
+def render_mermaid(tables: list[Table], relationships: list[tuple[str, str, str, bool]]) -> str:
+    lines = [MERMAID_INIT, "erDiagram"]
+    for table in sorted(tables, key=lambda t: t.name):
         lines.append(f"    {table.name} {{")
         for col in table.columns:
             keys = [k for k, present in (("PK", col["pk"]), ("FK", bool(col["fk_table"]))) if present]
@@ -144,20 +175,46 @@ def render_mermaid(tables: dict[str, Table], relationships: list[tuple[str, str,
     return "\n".join(lines)
 
 
+def render_mermaid_overview(relationships: list[tuple[str, str, str, bool]]) -> str:
+    """A compact, attribute-free diagram showing just the full relationship graph."""
+    lines = [MERMAID_INIT, "erDiagram"]
+    for parent, child, column, notnull in relationships:
+        many_side = "|{" if notnull else "o{"
+        lines.append(f'    {parent} ||--{many_side} {child} : "{column}"')
+    return "\n".join(lines)
+
+
 def render_markdown(tables: dict[str, Table], relationships: list[tuple[str, str, str, bool]]) -> str:
+    domains = group_by_domain(tables)
+
     out = [
         "# SBAPI Entity Relationship Diagram",
         "",
         "Auto-generated from `sbapidatabase_schema.sql` by `scripts/generate_erd.py`. "
         "Do not edit by hand — rerun the script after changing the schema.",
         "",
+        "## Overview",
+        "",
+        "Full relationship graph, no columns (see the per-domain diagrams below for detail).",
+        "",
         "```mermaid",
-        render_mermaid(tables, relationships),
+        render_mermaid_overview(relationships),
         "```",
         "",
-        "## Tables",
-        "",
     ]
+
+    for domain_name, domain_tables in domains.items():
+        domain_table_names = {t.name for t in domain_tables}
+        domain_relationships = [r for r in relationships if r[1] in domain_table_names]
+        out.append(f"## {domain_name}")
+        out.append("")
+        out.append("```mermaid")
+        out.append(render_mermaid(domain_tables, domain_relationships))
+        out.append("```")
+        out.append("")
+
+    out.append("## Tables")
+    out.append("")
     for table in sorted(tables.values(), key=lambda t: t.name):
         out.append(f"### {table.name}")
         out.append("")

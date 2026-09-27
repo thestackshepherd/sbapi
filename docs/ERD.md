@@ -2,21 +2,52 @@
 
 Auto-generated from `sbapidatabase_schema.sql` by `scripts/generate_erd.py`. Do not edit by hand — rerun the script after changing the schema.
 
+## Overview
+
+Full relationship graph, no columns (see the per-domain diagrams below for detail).
+
 ```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
 erDiagram
-    actor_references {
-        int id PK
-        int actor_id FK
-        int citation_number
-        string source_text
-    }
-    actors {
-        int id PK
-        string actor_name
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
+    factions ||--o{ characters : "faction_id"
+    characters ||--|{ character_actors : "character_id"
+    actors ||--|{ character_actors : "actor_id"
+    media ||--o{ character_actors : "media_id"
+    characters ||--|{ character_quotes : "character_id"
+    media ||--o{ character_quotes : "media_id"
+    characters ||--|{ character_trivia : "character_id"
+    characters ||--|{ character_behind_the_scenes : "character_id"
+    characters ||--|{ character_references : "character_id"
+    characters ||--o{ locations : "ruler_id"
+    characters ||--o{ locations : "heir_id"
+    locations ||--|{ location_features : "location_id"
+    locations ||--|{ location_exports : "location_id"
+    locations ||--|{ location_relations : "location_id"
+    locations ||--|{ location_relations : "related_location_id"
+    locations ||--|{ location_trivia : "location_id"
+    locations ||--|{ location_references : "location_id"
+    characters ||--o{ factions : "leader_id"
+    factions ||--|{ faction_trivia : "faction_id"
+    factions ||--|{ faction_references : "faction_id"
+    characters ||--o{ vehicles : "pilot_id"
+    factions ||--o{ vehicles : "faction_id"
+    vehicles ||--|{ vehicle_trivia : "vehicle_id"
+    vehicles ||--|{ vehicle_references : "vehicle_id"
+    characters ||--o{ items : "owner_character_id"
+    items ||--|{ item_trivia : "item_id"
+    items ||--|{ item_references : "item_id"
+    media ||--|{ episodes : "media_id"
+    episodes ||--|{ episode_references : "episode_id"
+    media ||--|{ media_trivia : "media_id"
+    media ||--|{ media_references : "media_id"
+    actors ||--|{ actor_references : "actor_id"
+```
+
+## Characters
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
     character_actors {
         int id PK
         int character_id FK
@@ -58,64 +89,22 @@ erDiagram
         timestamp last_updated
         int faction_id FK
     }
-    episode_references {
-        int id PK
-        int episode_id FK
-        int citation_number
-        string source_text
-    }
-    episodes {
-        int id PK
-        int media_id FK
-        int season_number
-        int episode_number
-        string title
-        string description
-        date air_date
-        string source_url
-        timestamp last_updated
-    }
-    faction_references {
-        int id PK
-        int faction_id FK
-        int citation_number
-        string source_text
-    }
-    faction_trivia {
-        int id PK
-        int faction_id FK
-        string trivia_text
-    }
-    factions {
-        int id PK
-        string faction_name
-        string description
-        int leader_id FK
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
-    item_references {
-        int id PK
-        int item_id FK
-        int citation_number
-        string source_text
-    }
-    item_trivia {
-        int id PK
-        int item_id FK
-        string trivia_text
-    }
-    items {
-        int id PK
-        string item_name
-        string item_type
-        string description
-        int owner_character_id FK
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
+    factions ||--o{ characters : "faction_id"
+    characters ||--|{ character_actors : "character_id"
+    actors ||--|{ character_actors : "actor_id"
+    media ||--o{ character_actors : "media_id"
+    characters ||--|{ character_quotes : "character_id"
+    media ||--o{ character_quotes : "media_id"
+    characters ||--|{ character_trivia : "character_id"
+    characters ||--|{ character_behind_the_scenes : "character_id"
+    characters ||--|{ character_references : "character_id"
+```
+
+## Locations
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
     location_exports {
         int id PK
         int location_id FK
@@ -156,27 +145,51 @@ erDiagram
         string source_url
         timestamp last_updated
     }
-    media {
+    characters ||--o{ locations : "ruler_id"
+    characters ||--o{ locations : "heir_id"
+    locations ||--|{ location_features : "location_id"
+    locations ||--|{ location_exports : "location_id"
+    locations ||--|{ location_relations : "location_id"
+    locations ||--|{ location_relations : "related_location_id"
+    locations ||--|{ location_trivia : "location_id"
+    locations ||--|{ location_references : "location_id"
+```
+
+## Factions
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
+    faction_references {
         int id PK
-        string title
-        string media_type
-        date release_date
+        int faction_id FK
+        int citation_number
+        string source_text
+    }
+    faction_trivia {
+        int id PK
+        int faction_id FK
+        string trivia_text
+    }
+    factions {
+        int id PK
+        string faction_name
         string description
+        int leader_id FK
         string image_url
         string source_url
         timestamp last_updated
     }
-    media_references {
-        int id PK
-        int media_id FK
-        int citation_number
-        string source_text
-    }
-    media_trivia {
-        int id PK
-        int media_id FK
-        string trivia_text
-    }
+    characters ||--o{ factions : "leader_id"
+    factions ||--|{ faction_trivia : "faction_id"
+    factions ||--|{ faction_references : "faction_id"
+```
+
+## Vehicles
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
     vehicle_references {
         int id PK
         int vehicle_id FK
@@ -199,37 +212,110 @@ erDiagram
         string source_url
         timestamp last_updated
     }
-    factions ||--o{ characters : "faction_id"
-    characters ||--|{ character_actors : "character_id"
-    actors ||--|{ character_actors : "actor_id"
-    media ||--o{ character_actors : "media_id"
-    characters ||--|{ character_quotes : "character_id"
-    media ||--o{ character_quotes : "media_id"
-    characters ||--|{ character_trivia : "character_id"
-    characters ||--|{ character_behind_the_scenes : "character_id"
-    characters ||--|{ character_references : "character_id"
-    characters ||--o{ locations : "ruler_id"
-    characters ||--o{ locations : "heir_id"
-    locations ||--|{ location_features : "location_id"
-    locations ||--|{ location_exports : "location_id"
-    locations ||--|{ location_relations : "location_id"
-    locations ||--|{ location_relations : "related_location_id"
-    locations ||--|{ location_trivia : "location_id"
-    locations ||--|{ location_references : "location_id"
-    characters ||--o{ factions : "leader_id"
-    factions ||--|{ faction_trivia : "faction_id"
-    factions ||--|{ faction_references : "faction_id"
     characters ||--o{ vehicles : "pilot_id"
     factions ||--o{ vehicles : "faction_id"
     vehicles ||--|{ vehicle_trivia : "vehicle_id"
     vehicles ||--|{ vehicle_references : "vehicle_id"
+```
+
+## Items
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
+    item_references {
+        int id PK
+        int item_id FK
+        int citation_number
+        string source_text
+    }
+    item_trivia {
+        int id PK
+        int item_id FK
+        string trivia_text
+    }
+    items {
+        int id PK
+        string item_name
+        string item_type
+        string description
+        int owner_character_id FK
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
     characters ||--o{ items : "owner_character_id"
     items ||--|{ item_trivia : "item_id"
     items ||--|{ item_references : "item_id"
+```
+
+## Media
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
+    episode_references {
+        int id PK
+        int episode_id FK
+        int citation_number
+        string source_text
+    }
+    episodes {
+        int id PK
+        int media_id FK
+        int season_number
+        int episode_number
+        string title
+        string description
+        date air_date
+        string source_url
+        timestamp last_updated
+    }
+    media {
+        int id PK
+        string title
+        string media_type
+        date release_date
+        string description
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
+    media_references {
+        int id PK
+        int media_id FK
+        int citation_number
+        string source_text
+    }
+    media_trivia {
+        int id PK
+        int media_id FK
+        string trivia_text
+    }
     media ||--|{ episodes : "media_id"
     episodes ||--|{ episode_references : "episode_id"
     media ||--|{ media_trivia : "media_id"
     media ||--|{ media_references : "media_id"
+```
+
+## Actors
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
+    actor_references {
+        int id PK
+        int actor_id FK
+        int citation_number
+        string source_text
+    }
+    actors {
+        int id PK
+        string actor_name
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
     actors ||--|{ actor_references : "actor_id"
 ```
 
