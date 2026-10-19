@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - sbapi_db_data:/var/lib/postgresql/data
+      - sbapi_db_data:/var/lib/postgresql
     healthcheck:
       test:
         [
