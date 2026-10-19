@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/item.schema.json",
+  "title": "Item",
+  "description": "An object. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "item_name",
+    "item_type",
+    "source_url"
+  ],
+  "properties": {
+    "item_name": {
+      "type": "string"
+    },
+    "item_type": {
+      "enum": [
+        "weapon",
+        "artifact",
+        "tech",
+        "merchandise",
+        "other"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Summary."
+    },
+    "owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Owner's character name."
+    },
+    "parody_of": {
+      "$ref": "common.schema.json#/$defs/parody_of"
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

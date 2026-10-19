@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/common.schema.json",
+  "title": "Shared definitions",
+  "$defs": {
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Wiki page the record was scraped from."
+    },
+    "image_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Image URL from the page, if any."
+    },
+    "parody_of": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "What this spoofs (e.g. a Star Wars character), only if the page says so."
+    },
+    "appears_in": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Titles of media (films/shows) this appears in, exactly as the media record's title."
+    },
+    "trivia": {
+      "type": "array",
+      "description": "Trivia and behind-the-scenes notes from the page.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "text"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "trivia",
+              "behind_the_scenes"
+            ]
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "description": "The page's numbered references.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "number",
+          "text"
+        ],
+        "properties": {
+          "number": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Link in the reference, if any."
+          }
+        }
+      }
+    }
+  }
+}

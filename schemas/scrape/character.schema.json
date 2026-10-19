@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/character.schema.json",
+  "title": "Character",
+  "description": "A character. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "character_name",
+    "source_url"
+  ],
+  "properties": {
+    "character_name": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Full name, if different."
+    },
+    "species": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Species, e.g. Mog."
+    },
+    "gender": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Gender."
+    },
+    "character_role": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Role or title, e.g. princess."
+    },
+    "parody_of": {
+      "$ref": "common.schema.json#/$defs/parody_of"
+    },
+    "faction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Faction name."
+    },
+    "homeworld": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Home location name."
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "appears_in": {
+      "$ref": "common.schema.json#/$defs/appears_in"
+    },
+    "portrayed_by": {
+      "type": "array",
+      "description": "Who played or voiced the character.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "actor_name"
+        ],
+        "properties": {
+          "actor_name": {
+            "type": "string"
+          },
+          "media_title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Which film/show, if the page says."
+          },
+          "credit_type": {
+            "enum": [
+              "live_action",
+              "voice",
+              null
+            ],
+            "description": "Live action or voice."
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Notes."
+          }
+        }
+      }
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

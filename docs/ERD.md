@@ -9,41 +9,48 @@ Full relationship graph, no columns (see the per-domain diagrams below for detai
 ```mermaid
 %%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
 erDiagram
+    media ||--|{ episodes : "media_id"
+    characters ||--o{ factions : "leader_id"
+    characters ||--o{ locations : "ruler_id"
+    characters ||--o{ locations : "heir_id"
     factions ||--o{ characters : "faction_id"
+    locations ||--o{ characters : "homeworld_id"
+    factions ||--o{ vehicles : "faction_id"
+    characters ||--o{ items : "owner_character_id"
+    characters ||--o{ quotes : "character_id"
+    media ||--o{ quotes : "media_id"
+    episodes ||--o{ quotes : "episode_id"
     characters ||--|{ character_actors : "character_id"
     actors ||--|{ character_actors : "actor_id"
     media ||--o{ character_actors : "media_id"
-    characters ||--|{ character_quotes : "character_id"
-    media ||--o{ character_quotes : "media_id"
-    characters ||--|{ character_trivia : "character_id"
-    characters ||--|{ character_behind_the_scenes : "character_id"
-    characters ||--|{ character_references : "character_id"
-    characters ||--o{ locations : "ruler_id"
-    characters ||--o{ locations : "heir_id"
-    locations ||--|{ location_features : "location_id"
-    locations ||--|{ location_exports : "location_id"
-    locations ||--|{ location_relations : "location_id"
-    locations ||--|{ location_relations : "related_location_id"
-    locations ||--|{ location_trivia : "location_id"
-    locations ||--|{ location_references : "location_id"
-    characters ||--o{ factions : "leader_id"
-    factions ||--|{ faction_trivia : "faction_id"
-    factions ||--|{ faction_references : "faction_id"
-    characters ||--o{ vehicles : "pilot_id"
-    factions ||--o{ vehicles : "faction_id"
-    vehicles ||--|{ vehicle_trivia : "vehicle_id"
-    vehicles ||--|{ vehicle_references : "vehicle_id"
-    characters ||--o{ items : "owner_character_id"
-    items ||--|{ item_trivia : "item_id"
-    items ||--|{ item_references : "item_id"
-    media ||--|{ episodes : "media_id"
-    episodes ||--|{ episode_references : "episode_id"
-    media ||--|{ media_trivia : "media_id"
-    media ||--|{ media_references : "media_id"
-    actors ||--|{ actor_references : "actor_id"
+    media ||--|{ media_characters : "media_id"
+    characters ||--|{ media_characters : "character_id"
+    media ||--|{ media_locations : "media_id"
+    locations ||--|{ media_locations : "location_id"
+    media ||--|{ media_vehicles : "media_id"
+    vehicles ||--|{ media_vehicles : "vehicle_id"
+    vehicles ||--|{ vehicle_crew : "vehicle_id"
+    characters ||--|{ vehicle_crew : "character_id"
+    characters ||--o{ trivia : "character_id"
+    locations ||--o{ trivia : "location_id"
+    factions ||--o{ trivia : "faction_id"
+    vehicles ||--o{ trivia : "vehicle_id"
+    items ||--o{ trivia : "item_id"
+    media ||--o{ trivia : "media_id"
+    episodes ||--o{ trivia : "episode_id"
+    actors ||--o{ trivia : "actor_id"
+    characters ||--o{ citations : "character_id"
+    locations ||--o{ citations : "location_id"
+    factions ||--o{ citations : "faction_id"
+    vehicles ||--o{ citations : "vehicle_id"
+    items ||--o{ citations : "item_id"
+    media ||--o{ citations : "media_id"
+    episodes ||--o{ citations : "episode_id"
+    actors ||--o{ citations : "actor_id"
+    quotes ||--o{ citations : "quote_id"
 ```
 
-## Characters
+## Relationships
 
 ```mermaid
 %%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
@@ -53,200 +60,89 @@ erDiagram
         int character_id FK
         int actor_id FK
         int media_id FK
+        string credit_type
         string notes
     }
-    character_behind_the_scenes {
-        int id PK
-        int character_id FK
-        string note_text
+    media_characters {
+        int media_id PK,FK
+        int character_id PK,FK
     }
-    character_quotes {
-        int id PK
-        int character_id FK
-        string quote_text
-        int media_id FK
+    media_locations {
+        int media_id PK,FK
+        int location_id PK,FK
     }
-    character_references {
-        int id PK
-        int character_id FK
-        int citation_number
-        string source_text
+    media_vehicles {
+        int media_id PK,FK
+        int vehicle_id PK,FK
     }
-    character_trivia {
-        int id PK
-        int character_id FK
-        string trivia_text
+    vehicle_crew {
+        int vehicle_id PK,FK
+        int character_id PK,FK
+        string crew_role
     }
-    characters {
-        int id PK
-        string character_name
-        string full_name
-        string species
-        string gender
-        string character_role
-        string image_url
-        string source_url
-        timestamp last_updated
-        int faction_id FK
-    }
-    factions ||--o{ characters : "faction_id"
     characters ||--|{ character_actors : "character_id"
     actors ||--|{ character_actors : "actor_id"
     media ||--o{ character_actors : "media_id"
-    characters ||--|{ character_quotes : "character_id"
-    media ||--o{ character_quotes : "media_id"
-    characters ||--|{ character_trivia : "character_id"
-    characters ||--|{ character_behind_the_scenes : "character_id"
-    characters ||--|{ character_references : "character_id"
+    media ||--|{ media_characters : "media_id"
+    characters ||--|{ media_characters : "character_id"
+    media ||--|{ media_locations : "media_id"
+    locations ||--|{ media_locations : "location_id"
+    media ||--|{ media_vehicles : "media_id"
+    vehicles ||--|{ media_vehicles : "vehicle_id"
+    vehicles ||--|{ vehicle_crew : "vehicle_id"
+    characters ||--|{ vehicle_crew : "character_id"
 ```
 
-## Locations
+## Annotations
 
 ```mermaid
 %%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
 erDiagram
-    location_exports {
+    citations {
         int id PK
-        int location_id FK
-        string product_name
-        string notes
-    }
-    location_features {
-        int id PK
-        int location_id FK
-        string feature_name
-        string feature_description
-    }
-    location_references {
-        int id PK
-        int location_id FK
         int citation_number
         string source_text
-    }
-    location_relations {
-        int id PK
-        int location_id FK
-        int related_location_id FK
-        string relationship_type
-    }
-    location_trivia {
-        int id PK
-        int location_id FK
-        string trivia_text
-    }
-    locations {
-        int id PK
-        string name
-        string location_type
-        string description
-        int ruler_id FK
-        int heir_id FK
-        string image_url
         string source_url
-        timestamp last_updated
-    }
-    characters ||--o{ locations : "ruler_id"
-    characters ||--o{ locations : "heir_id"
-    locations ||--|{ location_features : "location_id"
-    locations ||--|{ location_exports : "location_id"
-    locations ||--|{ location_relations : "location_id"
-    locations ||--|{ location_relations : "related_location_id"
-    locations ||--|{ location_trivia : "location_id"
-    locations ||--|{ location_references : "location_id"
-```
-
-## Factions
-
-```mermaid
-%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
-erDiagram
-    faction_references {
-        int id PK
+        int character_id FK
+        int location_id FK
         int faction_id FK
-        int citation_number
-        string source_text
-    }
-    faction_trivia {
-        int id PK
-        int faction_id FK
-        string trivia_text
-    }
-    factions {
-        int id PK
-        string faction_name
-        string description
-        int leader_id FK
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
-    characters ||--o{ factions : "leader_id"
-    factions ||--|{ faction_trivia : "faction_id"
-    factions ||--|{ faction_references : "faction_id"
-```
-
-## Vehicles
-
-```mermaid
-%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
-erDiagram
-    vehicle_references {
-        int id PK
         int vehicle_id FK
-        int citation_number
-        string source_text
+        int item_id FK
+        int media_id FK
+        int episode_id FK
+        int actor_id FK
+        int quote_id FK
     }
-    vehicle_trivia {
+    trivia {
         int id PK
-        int vehicle_id FK
+        string trivia_kind
         string trivia_text
-    }
-    vehicles {
-        int id PK
-        string vehicle_name
-        string vehicle_type
-        string description
-        int pilot_id FK
+        int character_id FK
+        int location_id FK
         int faction_id FK
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
-    characters ||--o{ vehicles : "pilot_id"
-    factions ||--o{ vehicles : "faction_id"
-    vehicles ||--|{ vehicle_trivia : "vehicle_id"
-    vehicles ||--|{ vehicle_references : "vehicle_id"
-```
-
-## Items
-
-```mermaid
-%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
-erDiagram
-    item_references {
-        int id PK
+        int vehicle_id FK
         int item_id FK
-        int citation_number
-        string source_text
+        int media_id FK
+        int episode_id FK
+        int actor_id FK
     }
-    item_trivia {
-        int id PK
-        int item_id FK
-        string trivia_text
-    }
-    items {
-        int id PK
-        string item_name
-        string item_type
-        string description
-        int owner_character_id FK
-        string image_url
-        string source_url
-        timestamp last_updated
-    }
-    characters ||--o{ items : "owner_character_id"
-    items ||--|{ item_trivia : "item_id"
-    items ||--|{ item_references : "item_id"
+    characters ||--o{ trivia : "character_id"
+    locations ||--o{ trivia : "location_id"
+    factions ||--o{ trivia : "faction_id"
+    vehicles ||--o{ trivia : "vehicle_id"
+    items ||--o{ trivia : "item_id"
+    media ||--o{ trivia : "media_id"
+    episodes ||--o{ trivia : "episode_id"
+    actors ||--o{ trivia : "actor_id"
+    characters ||--o{ citations : "character_id"
+    locations ||--o{ citations : "location_id"
+    factions ||--o{ citations : "faction_id"
+    vehicles ||--o{ citations : "vehicle_id"
+    items ||--o{ citations : "item_id"
+    media ||--o{ citations : "media_id"
+    episodes ||--o{ citations : "episode_id"
+    actors ||--o{ citations : "actor_id"
+    quotes ||--o{ citations : "quote_id"
 ```
 
 ## Media
@@ -254,12 +150,6 @@ erDiagram
 ```mermaid
 %%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
 erDiagram
-    episode_references {
-        int id PK
-        int episode_id FK
-        int citation_number
-        string source_text
-    }
     episodes {
         int id PK
         int media_id FK
@@ -281,34 +171,14 @@ erDiagram
         string source_url
         timestamp last_updated
     }
-    media_references {
-        int id PK
-        int media_id FK
-        int citation_number
-        string source_text
-    }
-    media_trivia {
-        int id PK
-        int media_id FK
-        string trivia_text
-    }
     media ||--|{ episodes : "media_id"
-    episodes ||--|{ episode_references : "episode_id"
-    media ||--|{ media_trivia : "media_id"
-    media ||--|{ media_references : "media_id"
 ```
 
-## Actors
+## People
 
 ```mermaid
 %%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
 erDiagram
-    actor_references {
-        int id PK
-        int actor_id FK
-        int citation_number
-        string source_text
-    }
     actors {
         int id PK
         string actor_name
@@ -316,19 +186,93 @@ erDiagram
         string source_url
         timestamp last_updated
     }
-    actors ||--|{ actor_references : "actor_id"
+    characters {
+        int id PK
+        string character_name
+        string full_name
+        string species
+        string gender
+        string character_role
+        string parody_of
+        int faction_id FK
+        int homeworld_id FK
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
+    factions {
+        int id PK
+        string faction_name
+        string description
+        string parody_of
+        string image_url
+        string source_url
+        timestamp last_updated
+        int leader_id FK
+    }
+    characters ||--o{ factions : "leader_id"
+    factions ||--o{ characters : "faction_id"
+    locations ||--o{ characters : "homeworld_id"
+```
+
+## Things
+
+```mermaid
+%%{init: {'er': {'useMaxWidth': false}, 'themeVariables': {'fontSize': '18px'}}}%%
+erDiagram
+    items {
+        int id PK
+        string item_name
+        string item_type
+        string description
+        string parody_of
+        int owner_character_id FK
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
+    locations {
+        int id PK
+        string name
+        string location_type
+        string description
+        string parody_of
+        string image_url
+        string source_url
+        timestamp last_updated
+        int ruler_id FK
+        int heir_id FK
+    }
+    quotes {
+        int id PK
+        string quote_text
+        int character_id FK
+        int media_id FK
+        int episode_id FK
+        string source_url
+        timestamp last_updated
+    }
+    vehicles {
+        int id PK
+        string vehicle_name
+        string vehicle_type
+        string description
+        string parody_of
+        int faction_id FK
+        string image_url
+        string source_url
+        timestamp last_updated
+    }
+    characters ||--o{ locations : "ruler_id"
+    characters ||--o{ locations : "heir_id"
+    factions ||--o{ vehicles : "faction_id"
+    characters ||--o{ items : "owner_character_id"
+    characters ||--o{ quotes : "character_id"
+    media ||--o{ quotes : "media_id"
+    episodes ||--o{ quotes : "episode_id"
 ```
 
 ## Tables
-
-### actor_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| actor_id | INTEGER | FK → actors |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
 
 ### actors
 
@@ -348,41 +292,8 @@ erDiagram
 | character_id | INTEGER | FK → characters |
 | actor_id | INTEGER | FK → actors |
 | media_id | INTEGER | FK → media |
+| credit_type | VARCHAR |  |
 | notes | TEXT |  |
-
-### character_behind_the_scenes
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| character_id | INTEGER | FK → characters |
-| note_text | TEXT |  |
-
-### character_quotes
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| character_id | INTEGER | FK → characters |
-| quote_text | TEXT |  |
-| media_id | INTEGER | FK → media |
-
-### character_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| character_id | INTEGER | FK → characters |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
-
-### character_trivia
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| character_id | INTEGER | FK → characters |
-| trivia_text | TEXT |  |
 
 ### characters
 
@@ -394,19 +305,30 @@ erDiagram
 | species | VARCHAR |  |
 | gender | VARCHAR |  |
 | character_role | VARCHAR |  |
+| parody_of | VARCHAR |  |
+| faction_id | INTEGER | FK → factions |
+| homeworld_id | INTEGER | FK → locations |
 | image_url | VARCHAR |  |
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
-| faction_id | INTEGER | FK → factions |
 
-### episode_references
+### citations
 
 | Column | Type | Key |
 |---|---|---|
 | id | SERIAL | PK |
-| episode_id | INTEGER | FK → episodes |
 | citation_number | INTEGER |  |
 | source_text | TEXT |  |
+| source_url | VARCHAR |  |
+| character_id | INTEGER | FK → characters |
+| location_id | INTEGER | FK → locations |
+| faction_id | INTEGER | FK → factions |
+| vehicle_id | INTEGER | FK → vehicles |
+| item_id | INTEGER | FK → items |
+| media_id | INTEGER | FK → media |
+| episode_id | INTEGER | FK → episodes |
+| actor_id | INTEGER | FK → actors |
+| quote_id | INTEGER | FK → quotes |
 
 ### episodes
 
@@ -422,23 +344,6 @@ erDiagram
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
 
-### faction_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| faction_id | INTEGER | FK → factions |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
-
-### faction_trivia
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| faction_id | INTEGER | FK → factions |
-| trivia_text | TEXT |  |
-
 ### factions
 
 | Column | Type | Key |
@@ -446,27 +351,11 @@ erDiagram
 | id | SERIAL | PK |
 | faction_name | VARCHAR |  |
 | description | TEXT |  |
-| leader_id | INTEGER | FK → characters |
+| parody_of | VARCHAR |  |
 | image_url | VARCHAR |  |
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
-
-### item_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| item_id | INTEGER | FK → items |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
-
-### item_trivia
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| item_id | INTEGER | FK → items |
-| trivia_text | TEXT |  |
+| leader_id | INTEGER | FK → characters |
 
 ### items
 
@@ -476,54 +365,11 @@ erDiagram
 | item_name | VARCHAR |  |
 | item_type | VARCHAR |  |
 | description | TEXT |  |
+| parody_of | VARCHAR |  |
 | owner_character_id | INTEGER | FK → characters |
 | image_url | VARCHAR |  |
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
-
-### location_exports
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| location_id | INTEGER | FK → locations |
-| product_name | VARCHAR |  |
-| notes | TEXT |  |
-
-### location_features
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| location_id | INTEGER | FK → locations |
-| feature_name | VARCHAR |  |
-| feature_description | TEXT |  |
-
-### location_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| location_id | INTEGER | FK → locations |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
-
-### location_relations
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| location_id | INTEGER | FK → locations |
-| related_location_id | INTEGER | FK → locations |
-| relationship_type | VARCHAR |  |
-
-### location_trivia
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| location_id | INTEGER | FK → locations |
-| trivia_text | TEXT |  |
 
 ### locations
 
@@ -533,11 +379,12 @@ erDiagram
 | name | VARCHAR |  |
 | location_type | VARCHAR |  |
 | description | TEXT |  |
-| ruler_id | INTEGER | FK → characters |
-| heir_id | INTEGER | FK → characters |
+| parody_of | VARCHAR |  |
 | image_url | VARCHAR |  |
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
+| ruler_id | INTEGER | FK → characters |
+| heir_id | INTEGER | FK → characters |
 
 ### media
 
@@ -552,39 +399,62 @@ erDiagram
 | source_url | VARCHAR |  |
 | last_updated | TIMESTAMPTZ |  |
 
-### media_references
+### media_characters
+
+| Column | Type | Key |
+|---|---|---|
+| media_id | INTEGER | PK, FK → media |
+| character_id | INTEGER | PK, FK → characters |
+
+### media_locations
+
+| Column | Type | Key |
+|---|---|---|
+| media_id | INTEGER | PK, FK → media |
+| location_id | INTEGER | PK, FK → locations |
+
+### media_vehicles
+
+| Column | Type | Key |
+|---|---|---|
+| media_id | INTEGER | PK, FK → media |
+| vehicle_id | INTEGER | PK, FK → vehicles |
+
+### quotes
 
 | Column | Type | Key |
 |---|---|---|
 | id | SERIAL | PK |
+| quote_text | TEXT |  |
+| character_id | INTEGER | FK → characters |
 | media_id | INTEGER | FK → media |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
+| episode_id | INTEGER | FK → episodes |
+| source_url | VARCHAR |  |
+| last_updated | TIMESTAMPTZ |  |
 
-### media_trivia
+### trivia
 
 | Column | Type | Key |
 |---|---|---|
 | id | SERIAL | PK |
+| trivia_kind | VARCHAR |  |
+| trivia_text | TEXT |  |
+| character_id | INTEGER | FK → characters |
+| location_id | INTEGER | FK → locations |
+| faction_id | INTEGER | FK → factions |
+| vehicle_id | INTEGER | FK → vehicles |
+| item_id | INTEGER | FK → items |
 | media_id | INTEGER | FK → media |
-| trivia_text | TEXT |  |
+| episode_id | INTEGER | FK → episodes |
+| actor_id | INTEGER | FK → actors |
 
-### vehicle_references
-
-| Column | Type | Key |
-|---|---|---|
-| id | SERIAL | PK |
-| vehicle_id | INTEGER | FK → vehicles |
-| citation_number | INTEGER |  |
-| source_text | TEXT |  |
-
-### vehicle_trivia
+### vehicle_crew
 
 | Column | Type | Key |
 |---|---|---|
-| id | SERIAL | PK |
-| vehicle_id | INTEGER | FK → vehicles |
-| trivia_text | TEXT |  |
+| vehicle_id | INTEGER | PK, FK → vehicles |
+| character_id | INTEGER | PK, FK → characters |
+| crew_role | VARCHAR |  |
 
 ### vehicles
 
@@ -594,7 +464,7 @@ erDiagram
 | vehicle_name | VARCHAR |  |
 | vehicle_type | VARCHAR |  |
 | description | TEXT |  |
-| pilot_id | INTEGER | FK → characters |
+| parody_of | VARCHAR |  |
 | faction_id | INTEGER | FK → factions |
 | image_url | VARCHAR |  |
 | source_url | VARCHAR |  |

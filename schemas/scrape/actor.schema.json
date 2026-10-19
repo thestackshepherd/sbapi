@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/actor.schema.json",
+  "title": "Actor",
+  "description": "A real-world cast member. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "actor_name",
+    "source_url"
+  ],
+  "properties": {
+    "actor_name": {
+      "type": "string"
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}
