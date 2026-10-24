@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/location.schema.json",
+  "title": "Location",
+  "description": "A place (planet, moon, ship used as a setting). Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "source_url"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "location_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "e.g. planet, moon."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Summary."
+    },
+    "ruler": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Ruler's character name."
+    },
+    "heir": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Heir's character name."
+    },
+    "parody_of": {
+      "$ref": "common.schema.json#/$defs/parody_of"
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "appears_in": {
+      "$ref": "common.schema.json#/$defs/appears_in"
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

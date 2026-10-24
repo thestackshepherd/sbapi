@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/quote.schema.json",
+  "title": "Quote",
+  "description": "One line of dialogue. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "quote_text",
+    "source_url"
+  ],
+  "properties": {
+    "quote_text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "character_name": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Speaker, if known."
+    },
+    "media_title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Where it is spoken."
+    },
+    "episode_title": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Episode, for a series."
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    }
+  }
+}

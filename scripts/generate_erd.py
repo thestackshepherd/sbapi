@@ -22,20 +22,19 @@ ALTER_COLUMN_RE = re.compile(
     r"ALTER TABLE\s+(\w+)\s+ADD COLUMN IF NOT EXISTS\s+(\w+)\s+(.*?);",
     re.IGNORECASE,
 )
+COMPOSITE_PK_RE = re.compile(r"PRIMARY KEY\s*\((.*?)\)", re.IGNORECASE)
 REFERENCES_RE = re.compile(r"REFERENCES\s+(\w+)\s*\(", re.IGNORECASE)
 
 TABLE_LEVEL_CONSTRAINT_PREFIXES = ("UNIQUE", "CHECK", "PRIMARY KEY", "FOREIGN KEY")
 
-# Mirrors the comment-block groupings already used in sbapidatabase_schema.sql
-# (Character Table(s):, Location Table(s):, etc). Checked in order, first match wins.
+# Mirrors the comment-block groupings used in sbapidatabase_schema.sql
+# (entities, Relationship Table(s):, Annotation Table(s):). Checked in order, first match wins.
 DOMAINS = [
-    ("Characters", ("characters", "character_")),
-    ("Locations", ("locations", "location_")),
-    ("Factions", ("factions", "faction_")),
-    ("Vehicles", ("vehicles", "vehicle_")),
-    ("Items", ("items", "item_")),
-    ("Media", ("media", "episodes", "episode_", "media_")),
-    ("Actors", ("actors", "actor_")),
+    ("Relationships", ("character_actors", "media_characters", "media_locations", "media_vehicles", "vehicle_crew")),
+    ("Annotations", ("trivia", "citations")),
+    ("Media", ("media", "episodes")),
+    ("People", ("characters", "actors", "factions")),
+    ("Things", ("locations", "vehicles", "items", "quotes")),
 ]
 
 # Prevents Mermaid/GitHub from auto-shrinking a diagram to fit the page width,
@@ -114,10 +113,17 @@ def parse_schema(sql: str) -> dict[str, Table]:
         # replaces that table's definition rather than merging into it.
         table = Table(table_name)
         tables[table_name] = table
+        composite_pk: set[str] = set()
         for item in split_top_level(body):
+            pk_match = COMPOSITE_PK_RE.match(item)
+            if pk_match:
+                composite_pk.update(c.strip() for c in pk_match.group(1).split(","))
             col = parse_column_def(item)
             if col:
                 table.add_column(**col)
+        for col in table.columns:
+            if col["name"] in composite_pk:
+                col["pk"] = True
 
     for match in ALTER_COLUMN_RE.finditer(sql):
         table_name, col_name, rest = match.groups()

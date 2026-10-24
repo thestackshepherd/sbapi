@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/media.schema.json",
+  "title": "Media",
+  "description": "One film or show. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "source_url"
+  ],
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "media_type": {
+      "enum": [
+        "film",
+        "series",
+        null
+      ],
+      "description": "Film or series."
+    },
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "First release date."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Summary."
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

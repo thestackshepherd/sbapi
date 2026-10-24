@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/episode.schema.json",
+  "title": "Episode",
+  "description": "One episode of a series. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "title",
+    "media_title",
+    "source_url"
+  ],
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "media_title": {
+      "type": "string",
+      "description": "Title of the series it belongs to."
+    },
+    "season_number": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Season."
+    },
+    "episode_number": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Episode number within the season."
+    },
+    "air_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Original air date."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Summary."
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/thestackshepherd/sbapi/schemas/scrape/vehicle.schema.json",
+  "title": "Vehicle",
+  "description": "A spacecraft or vehicle. Use null (or an empty array) for anything the page doesn't state; never guess.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "vehicle_name",
+    "source_url"
+  ],
+  "properties": {
+    "vehicle_name": {
+      "type": "string"
+    },
+    "vehicle_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "e.g. Winnebago, warship."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Summary."
+    },
+    "faction": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Owning faction name."
+    },
+    "parody_of": {
+      "$ref": "common.schema.json#/$defs/parody_of"
+    },
+    "image_url": {
+      "$ref": "common.schema.json#/$defs/image_url"
+    },
+    "appears_in": {
+      "$ref": "common.schema.json#/$defs/appears_in"
+    },
+    "crew": {
+      "type": "array",
+      "description": "Who is aboard.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "character_name"
+        ],
+        "properties": {
+          "character_name": {
+            "type": "string"
+          },
+          "crew_role": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "e.g. pilot, co-pilot."
+          }
+        }
+      }
+    },
+    "source_url": {
+      "$ref": "common.schema.json#/$defs/source_url"
+    },
+    "trivia": {
+      "$ref": "common.schema.json#/$defs/trivia"
+    },
+    "citations": {
+      "$ref": "common.schema.json#/$defs/citations"
+    }
+  }
+}

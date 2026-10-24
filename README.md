@@ -26,6 +26,7 @@ src/sbapi/
       sbapidatabase_schema.sql # Postgres schema (tables, indexes)
     models/                    # SQLAlchemy models
     routes/                    # Flask blueprints (in progress)
+schemas/scrape/           # JSON Schemas for wiki-scraped records
   infra/                  # Terraform for AWS (state backend + bootstrap)
 Dockerfile
 sbapi-compose.yaml        # local Postgres + app via Docker Compose
