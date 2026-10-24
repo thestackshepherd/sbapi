@@ -4,3 +4,5 @@ DATABASE_PASSWORD="postgres"
 DATABASE_HOST="localhost"
 DATABASE_PORT=5432
 DATABASE_NAME="sbapi_dev_db"
+# Host port Postgres is published on by docker compose (change if 5432 is taken)
+DB_HOST_PORT=5432

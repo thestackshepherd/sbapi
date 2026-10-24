@@ -44,13 +44,22 @@ docker compose -f sbapi-compose.yaml up
 ```
 
 This starts a Postgres container and the Flask app (via Gunicorn) in
-another container, wired together with the env vars in `.env`.
+another container. On first start with an empty volume, Postgres loads
+`src/sbapi/app/database/sbapidatabase_schema.sql` automatically. If you change
+the schema, reset with `docker compose -f sbapi-compose.yaml down -v`.
 
-To load the schema into the database:
+Check it is up (the app container also has a healthcheck on this):
 
 ```sh
-psql "$DATABASE_URL" -f src/sbapi/app/database/sbapidatabase_schema.sql
+curl localhost:8000/health        # {"status":"ok"} once the DB is reachable
+curl localhost:8000/characters    # [] until data is loaded
 ```
+
+If port 5432 is already taken locally, set `DB_HOST_PORT` in `.env` (and
+`DATABASE_PORT` to match when running the ingest commands from your machine).
+
+To get data in quickly, load the sourced sample records (see below):
+`cd src && uv run --extra ingest python -m sbapi.ingest load ../data/sample`.
 
 ## Loading data
 
