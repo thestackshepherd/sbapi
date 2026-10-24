@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify
 
-from sbapi.app.database.connection import SessionLocal
-from sbapi.app.models import Character
-from sbapi.app.repositories.sbapi_sqlalchemy_repo_characters import CharacterRepository
+from sbapi_api.database.connection import SessionLocal
+from sbapi_api.models import Character
+from sbapi_api.repositories.sbapi_sqlalchemy_repo_characters import CharacterRepository
 
 characters_bp = Blueprint("characters", __name__, url_prefix="/characters")
 

@@ -2,6 +2,15 @@ version = 1
 revision = 3
 requires-python = ">=3.14"
 
+[manifest]
+members = [
+    "sbapi-api",
+    "sbapi-scripts",
+]
+
+[manifest.dependency-groups]
+dev = [{ name = "pytest", specifier = ">=8.3" }]
+
 [[package]]
 name = "attrs"
 version = "26.1.0"
@@ -394,9 +403,9 @@ wheels = [
 ]
 
 [[package]]
-name = "sbapi"
+name = "sbapi-api"
 version = "0.1.0"
-source = { editable = "." }
+source = { editable = "sbapi_api" }
 dependencies = [
     { name = "dotenv" },
     { name = "flask" },
@@ -405,31 +414,36 @@ dependencies = [
     { name = "sqlalchemy" },
 ]
 
+[package.metadata]
+requires-dist = [
+    { name = "dotenv", specifier = ">=0.9.9" },
+    { name = "flask", specifier = ">=3.1.3" },
+    { name = "gunicorn", specifier = ">=26.2.0" },
+    { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
+    { name = "sqlalchemy", specifier = ">=2.0.51" },
+]
+
+[[package]]
+name = "sbapi-scripts"
+version = "0.1.0"
+source = { editable = "sbapi_scripts" }
+dependencies = [
+    { name = "psycopg", extra = ["binary"] },
+]
+
 [package.optional-dependencies]
 ingest = [
     { name = "jsonschema" },
     { name = "mwparserfromhell" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
 [package.metadata]
 requires-dist = [
-    { name = "dotenv", specifier = ">=0.9.9" },
-    { name = "flask", specifier = ">=3.1.3" },
-    { name = "gunicorn", specifier = ">=26.2.0" },
     { name = "jsonschema", marker = "extra == 'ingest'", specifier = ">=4.23" },
     { name = "mwparserfromhell", marker = "extra == 'ingest'", specifier = ">=0.6.6" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.4" },
-    { name = "sqlalchemy", specifier = ">=2.0.51" },
 ]
 provides-extras = ["ingest"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3" }]
 
 [[package]]
 name = "sqlalchemy"

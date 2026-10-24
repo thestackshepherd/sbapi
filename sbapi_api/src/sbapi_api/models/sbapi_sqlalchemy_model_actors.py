@@ -4,7 +4,7 @@ from typing import Optional
 from sqlalchemy import CheckConstraint, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
+from sbapi_api.models.sbapi_sqlalchemy_model_base import Base
 
 
 class Actor(Base):

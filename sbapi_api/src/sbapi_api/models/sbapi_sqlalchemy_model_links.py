@@ -1,7 +1,7 @@
 """Pure many-to-many link tables (no extra columns), used as relationship secondaries."""
 from sqlalchemy import Column, ForeignKey, Table
 
-from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
+from sbapi_api.models.sbapi_sqlalchemy_model_base import Base
 
 media_characters = Table(
     "media_characters",

@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from sbapi.app.models import Character
+from sbapi_api.models import Character
 
 
 class CharacterRepository:

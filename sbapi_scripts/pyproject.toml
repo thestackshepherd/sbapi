@@ -1,0 +1,24 @@
+[project]
+name = "sbapi-scripts"
+version = "0.1.0"
+description = "Space Balls API (SBAPI) - database and data-pipeline tooling"
+authors = [
+    { name = "thestackshepherd", email = "jadenmschwartz00@gmail.com" }
+]
+
+requires-python = ">=3.14"
+
+dependencies = [
+    "psycopg[binary]>=3.3.4",
+]
+
+[project.optional-dependencies]
+# Wiki -> Postgres data pipeline (sbapi_scripts.ingest). `uv sync --extra ingest`
+ingest = [
+    "jsonschema>=4.23",
+    "mwparserfromhell>=0.6.6",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.3,<0.13.0"]
+build-backend = "uv_build"

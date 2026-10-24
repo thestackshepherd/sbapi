@@ -4,8 +4,8 @@
 from flask import Flask, jsonify
 from sqlalchemy import text
 
-from sbapi.app.database.connection import SessionLocal
-from sbapi.app.routes.sbapi_flask_route_characters import characters_bp
+from sbapi_api.database.connection import SessionLocal
+from sbapi_api.routes.sbapi_flask_route_characters import characters_bp
 
 
 def create_app() -> Flask:
