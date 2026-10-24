@@ -188,3 +188,26 @@ def test_wiki_client_against_fake_api(tmp_path):
                             user_agent="ClaudeBot").license()
     finally:
         server.shutdown()
+
+
+def test_forbidden_robots_txt_stops_the_scrape(tmp_path):
+    import threading
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    class Forbidden(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_GET(self):
+            self.send_response(403)
+            self.end_headers()
+
+    server = HTTPServer(("127.0.0.1", 0), Forbidden)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    try:
+        client = wiki.WikiClient(f"http://127.0.0.1:{server.server_port}",
+                                 cache_dir=tmp_path / "cache", delay=0)
+        with pytest.raises(wiki.RobotsDisallowed, match="dump"):
+            client.license()
+    finally:
+        server.shutdown()

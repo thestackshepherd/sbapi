@@ -16,6 +16,7 @@ import json
 import re
 import time
 import urllib.parse
+import urllib.error
 import urllib.request
 import urllib.robotparser
 import xml.etree.ElementTree as ET
@@ -58,8 +59,18 @@ class WikiClient:
             self._robots = urllib.robotparser.RobotFileParser()
             req = urllib.request.Request(f"{self.base_url}/robots.txt",
                                          headers={"User-Agent": self.user_agent})
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                self._robots.parse(resp.read().decode("utf-8").splitlines())
+            try:
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    self._robots.parse(resp.read().decode("utf-8").splitlines())
+            except urllib.error.HTTPError as e:
+                if e.code in (401, 403):
+                    # Convention (and robotparser): an access-denied robots.txt means the
+                    # whole site is off-limits. Stop rather than crawl past it.
+                    raise RobotsDisallowed(
+                        f"{self.base_url}/robots.txt answered {e.code}, which means the site is "
+                        "off-limits to crawlers from here. Use `python -m sbapi.ingest dump` "
+                        "with the wiki's XML dump (Special:Statistics) instead.") from e
+                raise
             crawl_delay = self._robots.crawl_delay(self.user_agent)
             if crawl_delay:
                 self.delay = max(self.delay, float(crawl_delay))
