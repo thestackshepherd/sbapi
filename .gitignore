@@ -34,9 +34,6 @@ venv/
 # PyCharm
 .idea/
 
-# uv
-uv.lock
-
 # cspell
 cspell.json
 
