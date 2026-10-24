@@ -1,6 +1,6 @@
 # SBAPI Entity Relationship Diagram
 
-Auto-generated from `sbapidatabase_schema.sql` by `scripts/generate_erd.py`. Do not edit by hand — rerun the script after changing the schema.
+Auto-generated from `schema.sql` by `sbapi_scripts/generate_erd.py`. Do not edit by hand — rerun the script after changing the schema.
 
 ## Overview
 

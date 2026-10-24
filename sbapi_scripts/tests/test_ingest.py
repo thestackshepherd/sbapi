@@ -10,10 +10,10 @@ from pathlib import Path
 
 import pytest
 
-from sbapi.ingest import extract, validate, wiki
-from sbapi.ingest.__main__ import read_records
+from sbapi_scripts.ingest import extract, validate, wiki
+from sbapi_scripts.ingest.__main__ import read_records
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 SAMPLE = ROOT / "data" / "sample"
 BASE = "https://spaceballs.fandom.com"
 
@@ -93,9 +93,9 @@ def test_sample_records_are_valid():
 def test_load_is_idempotent():
     import psycopg
 
-    from sbapi.ingest.load import Loader
+    from sbapi_scripts.ingest.load import Loader
 
-    schema_sql = (ROOT / "src/sbapi/app/database/sbapidatabase_schema.sql").read_text()
+    schema_sql = (ROOT / "sbapi_scripts/src/sbapi_scripts/db/schema.sql").read_text()
     tables = ["media", "actors", "characters", "vehicles", "quotes", "trivia",
               "character_actors", "media_characters", "media_vehicles", "vehicle_crew"]
 
@@ -211,3 +211,8 @@ def test_forbidden_robots_txt_stops_the_scrape(tmp_path):
             client.license()
     finally:
         server.shutdown()
+
+
+def test_schema_dir_points_at_repo_schemas():
+    assert validate.SCHEMA_DIR.is_dir()
+    assert (validate.SCHEMA_DIR / "character.schema.json").exists()

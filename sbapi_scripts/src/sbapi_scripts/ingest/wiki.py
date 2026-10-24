@@ -68,7 +68,7 @@ class WikiClient:
                     # whole site is off-limits. Stop rather than crawl past it.
                     raise RobotsDisallowed(
                         f"{self.base_url}/robots.txt answered {e.code}, which means the site is "
-                        "off-limits to crawlers from here. Use `python -m sbapi.ingest dump` "
+                        "off-limits to crawlers from here. Use `python -m sbapi_scripts.ingest dump` "
                         "with the wiki's XML dump (Special:Statistics) instead.") from e
                 raise
             crawl_delay = self._robots.crawl_delay(self.user_agent)

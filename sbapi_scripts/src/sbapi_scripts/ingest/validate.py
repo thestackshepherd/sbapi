@@ -9,7 +9,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator, FormatChecker
 from referencing import Registry, Resource
 
-SCHEMA_DIR = Path(__file__).resolve().parents[3] / "schemas" / "scrape"
+SCHEMA_DIR = Path(__file__).resolve().parents[4] / "schemas" / "scrape"
 ENTITY_TYPES = ["media", "episode", "actor", "faction", "location", "character",
                 "vehicle", "item", "quote"]
 

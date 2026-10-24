@@ -2,16 +2,16 @@
 """Generate a Mermaid ER diagram + table reference from the SQL schema file.
 
 Usage:
-    uv run python scripts/generate_erd.py
-    uv run python scripts/generate_erd.py --schema path/to/schema.sql --output docs/ERD.md
+    uv run python -m sbapi_scripts.generate_erd
+    uv run python -m sbapi_scripts.generate_erd --schema path/to/schema.sql --output docs/ERD.md
 """
 
 import argparse
 import re
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_SCHEMA = REPO_ROOT / "src/sbapi/app/database/sbapidatabase_schema.sql"
+REPO_ROOT = Path(__file__).resolve().parents[3]
+DEFAULT_SCHEMA = REPO_ROOT / "sbapi_scripts/src/sbapi_scripts/db/schema.sql"
 DEFAULT_OUTPUT = REPO_ROOT / "docs/ERD.md"
 
 CREATE_TABLE_RE = re.compile(
@@ -27,7 +27,7 @@ REFERENCES_RE = re.compile(r"REFERENCES\s+(\w+)\s*\(", re.IGNORECASE)
 
 TABLE_LEVEL_CONSTRAINT_PREFIXES = ("UNIQUE", "CHECK", "PRIMARY KEY", "FOREIGN KEY")
 
-# Mirrors the comment-block groupings used in sbapidatabase_schema.sql
+# Mirrors the comment-block groupings used in schema.sql
 # (entities, Relationship Table(s):, Annotation Table(s):). Checked in order, first match wins.
 DOMAINS = [
     ("Relationships", ("character_actors", "media_characters", "media_locations", "media_vehicles", "vehicle_crew")),
@@ -196,7 +196,7 @@ def render_markdown(tables: dict[str, Table], relationships: list[tuple[str, str
     out = [
         "# SBAPI Entity Relationship Diagram",
         "",
-        "Auto-generated from `sbapidatabase_schema.sql` by `scripts/generate_erd.py`. "
+        "Auto-generated from `schema.sql` by `sbapi_scripts/generate_erd.py`. "
         "Do not edit by hand — rerun the script after changing the schema.",
         "",
         "## Overview",

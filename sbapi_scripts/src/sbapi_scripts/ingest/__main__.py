@@ -1,10 +1,10 @@
 """
 CLI for the ingest pipeline.
 
-    python -m sbapi.ingest scrape   [--out data/scrape]    live wiki API -> JSON files
-    python -m sbapi.ingest dump FILE [--out data/scrape]   XML dump -> JSON files
-    python -m sbapi.ingest validate [DIR]                  check JSON files against schemas
-    python -m sbapi.ingest load     [DIR]                  JSON files -> Postgres (DATABASE_* env)
+    python -m sbapi_scripts.ingest scrape   [--out data/scrape]    live wiki API -> JSON files
+    python -m sbapi_scripts.ingest dump FILE [--out data/scrape]   XML dump -> JSON files
+    python -m sbapi_scripts.ingest validate [DIR]                  check JSON files against schemas
+    python -m sbapi_scripts.ingest load     [DIR]                  JSON files -> Postgres (DATABASE_* env)
 """
 
 import argparse
@@ -127,7 +127,7 @@ def cmd_load(args):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(prog="python -m sbapi.ingest", description=__doc__,
+    parser = argparse.ArgumentParser(prog="python -m sbapi_scripts.ingest", description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = parser.add_subparsers(required=True)
 

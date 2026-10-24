@@ -6,5 +6,5 @@ Ingest pipeline: Spaceballs wiki -> scrape JSON -> Postgres.
     validate.py       : records -> checked against the JSON Schemas
     load.py           : records -> Postgres, idempotently
 
-Run with `python -m sbapi.ingest --help`.
+Run with `python -m sbapi_scripts.ingest --help`.
 """

@@ -1,6 +1,6 @@
 """
 How wiki pages map onto scrape records. This is the part to tune after the
-first real run: `python -m sbapi.ingest report` lists the categories and
+first real run: `python -m sbapi_scripts.ingest report` lists the categories and
 infobox fields the wiki actually uses, and which ones nothing here maps.
 """
 
