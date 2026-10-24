@@ -26,7 +26,10 @@ src/sbapi/
       sbapidatabase_schema.sql # Postgres schema (tables, indexes)
     models/                    # SQLAlchemy models
     routes/                    # Flask blueprints (in progress)
+  ingest/                 # wiki -> JSON -> Postgres data pipeline
 schemas/scrape/           # JSON Schemas for wiki-scraped records
+data/sample/              # a few hand-checked records for trying the loader
+tests/
   infra/                  # Terraform for AWS (state backend + bootstrap)
 Dockerfile
 sbapi-compose.yaml        # local Postgres + app via Docker Compose
@@ -48,6 +51,35 @@ To load the schema into the database:
 ```sh
 psql "$DATABASE_URL" -f src/sbapi/app/database/sbapidatabase_schema.sql
 ```
+
+## Loading data
+
+Data comes from the [Spaceballs Wiki](https://spaceballs.fandom.com) (CC BY-SA 3.0).
+The pipeline lives in `src/sbapi/ingest/`:
+
+```sh
+uv sync --extra ingest
+cd src
+python -m sbapi.ingest scrape --limit 20   # trial run: live wiki API -> ../data/scrape/
+python -m sbapi.ingest scrape              # everything (1 request/second, cached in .cache/wiki)
+python -m sbapi.ingest validate            # check records against schemas/scrape/
+python -m sbapi.ingest load                # insert into Postgres (DATABASE_* env vars)
+```
+
+- **Scrape** uses `api.php`, which the wiki's robots.txt allows for general
+  bots. It checks robots.txt for its own user agent, waits between requests,
+  and caches every response, so re-runs are cheap. Run it from your own
+  machine: the wiki blocks Anthropic's crawler.
+- `python -m sbapi.ingest dump FILE` reads a MediaWiki XML dump instead
+  (download from the wiki's Special:Statistics page), with no network at all.
+- Each run writes `_report.json` with the categories and infobox fields the
+  wiki uses that `ingest/config.py` doesn't map yet. Tune the config from it.
+- **Load** is idempotent and runs in one transaction. Names that match no
+  record are left null and listed, never guessed.
+- `data/sample/` holds four pages' worth of records to try the loader:
+  `python -m sbapi.ingest load ../data/sample`.
+
+Tests: `uv run pytest` (set `SBAPI_TEST_DSN` to include the Postgres load test).
 
 ## Deployment
 

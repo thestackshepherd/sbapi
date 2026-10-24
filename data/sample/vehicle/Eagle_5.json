@@ -1,0 +1,33 @@
+{
+  "vehicle_name": "Eagle 5",
+  "vehicle_type": "1986 Winnebago Chieftain 33",
+  "description": "The Eagle 5 was the Winnebago that Lone Starr and Barf traveled in, notably using it to rescue Princess Vespa.",
+  "faction": null,
+  "parody_of": "Millennium Falcon",
+  "image_url": null,
+  "appears_in": [
+    "Spaceballs"
+  ],
+  "crew": [
+    {
+      "character_name": "Lone Starr",
+      "crew_role": null
+    },
+    {
+      "character_name": "Barf",
+      "crew_role": null
+    }
+  ],
+  "source_url": "https://spaceballs.fandom.com/wiki/Eagle_5",
+  "trivia": [
+    {
+      "kind": "trivia",
+      "text": "While a life-sized Eagle 5 was used, the model was used for the scenes in which the Winnebago flew through space."
+    },
+    {
+      "kind": "trivia",
+      "text": "In 2017, the original 1/12th scale model of the Eagle 5 used in the filming of Spaceballs was put on auction."
+    }
+  ],
+  "citations": []
+}

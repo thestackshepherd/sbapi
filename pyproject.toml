@@ -17,6 +17,18 @@ dependencies = [
     "sqlalchemy>=2.0.51",
 ]
 
+[project.optional-dependencies]
+# Wiki -> Postgres data pipeline (src/sbapi/ingest). `uv sync --extra ingest`
+ingest = [
+    "jsonschema>=4.23",
+    "mwparserfromhell>=0.6.6",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+]
+
 [project.scripts]
 sbapi = "sbapi.wsgi:main"
 
