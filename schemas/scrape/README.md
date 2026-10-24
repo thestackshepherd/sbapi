@@ -10,7 +10,7 @@ pieces (trivia, citations, source URL).
 - Anything the page doesn't state is `null` or an empty array. Never guess a
   value (see `CLAUDE.md`).
 
-Each schema maps onto `src/sbapi/app/database/sbapidatabase_schema.sql`:
+Each schema maps onto `sbapi_scripts/src/sbapi_scripts/db/schema.sql`:
 nested `trivia`/`citations` go to the shared `trivia`/`citations` tables,
 `appears_in` to `media_*`, `portrayed_by` to `character_actors`, and
 `crew` to `vehicle_crew`.

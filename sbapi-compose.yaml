@@ -11,7 +11,7 @@ services:
     volumes:
       - sbapi_db_data:/var/lib/postgresql
       # Runs once, on first start of an empty volume.
-      - ./src/sbapi/app/database/sbapidatabase_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sbapi_scripts/src/sbapi_scripts/db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
     healthcheck:
       test:
         [
