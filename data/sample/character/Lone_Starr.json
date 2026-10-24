@@ -1,0 +1,52 @@
+{
+  "character_name": "Lone Starr",
+  "full_name": null,
+  "species": null,
+  "gender": null,
+  "character_role": "captain",
+  "parody_of": "Han Solo and Luke Skywalker",
+  "faction": null,
+  "homeworld": null,
+  "image_url": null,
+  "appears_in": [
+    "Spaceballs"
+  ],
+  "portrayed_by": [
+    {
+      "actor_name": "Bill Pullman",
+      "media_title": "Spaceballs",
+      "credit_type": "live_action",
+      "notes": null
+    },
+    {
+      "actor_name": "Rino Romano",
+      "media_title": null,
+      "credit_type": "voice",
+      "notes": "animated series"
+    }
+  ],
+  "source_url": "https://spaceballs.fandom.com/wiki/Lone_Starr",
+  "trivia": [
+    {
+      "kind": "behind_the_scenes",
+      "text": "Lone Starr is portrayed in the film by Bill Pullman and by Rino Romano in the animated series."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "He a parody of the Star Wars characters Han Solo and Luke Skywalker."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "Lone Starr wears a fedora during his first scene, just like Indiana Jones."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "Bill Pullman was the third choice for Lone Starr, behind Tom Cruise and Tom Hanks."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "Lone Starr was said to have been born in the Ford Galaxy."
+    }
+  ],
+  "citations": []
+}

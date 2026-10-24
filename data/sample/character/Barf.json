@@ -1,0 +1,46 @@
+{
+  "character_name": "Barf",
+  "full_name": "Barfolomew",
+  "species": "mawg",
+  "gender": null,
+  "character_role": "co-pilot",
+  "parody_of": null,
+  "faction": null,
+  "homeworld": null,
+  "image_url": null,
+  "appears_in": [
+    "Spaceballs"
+  ],
+  "portrayed_by": [
+    {
+      "actor_name": "John Candy",
+      "media_title": "Spaceballs",
+      "credit_type": "live_action",
+      "notes": null
+    }
+  ],
+  "source_url": "https://spaceballs.fandom.com/wiki/Barf",
+  "trivia": [
+    {
+      "kind": "behind_the_scenes",
+      "text": "Rick Moranis suggested John Candy for the role of Barf."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "Spaceballs marked the fourth time that John Candy worked with Rick Moranis, the actor who portrayed Dark Helmet."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "His tail moved when a button in Candy's paw was pressed."
+    },
+    {
+      "kind": "behind_the_scenes",
+      "text": "His ears were controlled by Creature FX Puppeteer Rick Lazzarini."
+    },
+    {
+      "kind": "trivia",
+      "text": "Barf's rank on the 5-Man Band would be the Big Guy."
+    }
+  ],
+  "citations": []
+}
