@@ -6,6 +6,7 @@ __pycache__/
 .mypy_cache/
 .pytest_cache/
 .cache
+uv.lock
 
 # Coverage
 .coverage
@@ -25,7 +26,7 @@ env/
 venv/
 
 # VSCode
-.vscode/*
+.vscode/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -37,8 +38,10 @@ venv/
 # cspell
 cspell.json
 
-# Claude Code local settings (CLAUDE.md itself is tracked)
+# Claude Code local settings, claude.md untracked.
 .claude/
+.superpowers/
+CLAUDE.md
 
 # OS
 .DS_Store
