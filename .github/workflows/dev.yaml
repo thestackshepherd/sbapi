@@ -1,0 +1,15 @@
+# Development pipeline: every push to a branch other than main.
+name: Dev
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+concurrency:
+  group: dev-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    uses: ./.github/workflows/checks.yaml

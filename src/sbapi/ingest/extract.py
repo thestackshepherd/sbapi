@@ -138,7 +138,7 @@ def _citations(code):
         if name:
             seen_names.add(name)
         contents = mwparserfromhell.parse(str(tag.contents))
-        urls = [str(l.url) for l in contents.filter_external_links()]
+        urls = [str(link.url) for link in contents.filter_external_links()]
         text = _text(contents)
         if text or urls:
             numbered.append({"number": len(numbered) + 1, "text": text or urls[0],

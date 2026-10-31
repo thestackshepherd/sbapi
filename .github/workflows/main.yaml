@@ -1,0 +1,21 @@
+# Main pipeline: every push to main.
+name: Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  checks:
+    uses: ./.github/workflows/checks.yaml
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: checks
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the image
+        run: docker build -t sbapi:${{ github.sha }} .
+
+  # Deploy goes here once a target environment exists.

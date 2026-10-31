@@ -15,8 +15,8 @@ import hashlib
 import json
 import re
 import time
-import urllib.parse
 import urllib.error
+import urllib.parse
 import urllib.request
 import urllib.robotparser
 import xml.etree.ElementTree as ET
