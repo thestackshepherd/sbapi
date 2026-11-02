@@ -8,7 +8,7 @@ SQLAlchemy models are in place; the HTTP routes are still empty stubs.
 
 ## Stack
 
-- Python 3.14, managed with [uv](https://docs.astral.sh/uv/)
+- Python 3.15, managed with [uv](https://docs.astral.sh/uv/)
 - Flask + Gunicorn
 - PostgreSQL, accessed via SQLAlchemy + psycopg
 - Docker / Docker Compose for local dev

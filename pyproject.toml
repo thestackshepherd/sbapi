@@ -7,7 +7,7 @@ authors = [
     { name = "thestackshepherd", email = "jadenmschwartz00@gmail.com" }
 ]
 
-requires-python = ">=3.14"
+requires-python = ">=3.15"
 
 dependencies = [
     "dotenv>=0.9.9",
