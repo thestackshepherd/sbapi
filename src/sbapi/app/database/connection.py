@@ -1,8 +1,11 @@
+"""__summary__
+application postgresql db connection.
+"""
 import os
 
-from sqlalchemy import create_engine, URL
-from sqlalchemy.orm import sessionmaker
 import dotenv
+from sqlalchemy import URL, create_engine
+from sqlalchemy.orm import sessionmaker
 
 dotenv.load_dotenv()
 

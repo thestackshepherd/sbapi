@@ -20,10 +20,10 @@ class Character(Base):
     character_role: Mapped[str | None] = mapped_column(String)
     parody_of: Mapped[str | None] = mapped_column(String)
     faction_id: Mapped[int | None] = mapped_column(
-        ForeignKey("factions.id", ondelete="SET NULL"), index=True
+        ForeignKey("factions.id", ondelete="SET NULL")
     )
     homeworld_id: Mapped[int | None] = mapped_column(
-        ForeignKey("locations.id", ondelete="SET NULL"), index=True
+        ForeignKey("locations.id", ondelete="SET NULL")
     )
     image_url: Mapped[str | None] = mapped_column(String)
     source_url: Mapped[str | None] = mapped_column(String)
@@ -33,9 +33,6 @@ class Character(Base):
     )
     homeworld: Mapped[Location | None] = relationship(
         foreign_keys=[homeworld_id], back_populates="natives"
-    )
-    media: Mapped[list[Media]] = relationship(
-        secondary="media_characters", back_populates="characters"
     )
     actor_links: Mapped[list[CharacterActor]] = relationship(back_populates="character")
     crew_roles: Mapped[list[VehicleCrew]] = relationship(back_populates="character")

@@ -16,15 +16,10 @@ class Faction(Base):
     faction_name: Mapped[str] = mapped_column(String)
     description: Mapped[Optional[str]] = mapped_column(Text)
     parody_of: Mapped[Optional[str]] = mapped_column(String)
-    # factions <-> characters reference each other, so this FK is added after both tables exist
-    leader_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("characters.id", ondelete="SET NULL", use_alter=True), index=True
-    )
     image_url: Mapped[Optional[str]] = mapped_column(String)
     source_url: Mapped[Optional[str]] = mapped_column(String)
     last_updated: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
-    leader: Mapped[Optional["Character"]] = relationship(foreign_keys=[leader_id])
     members: Mapped[list["Character"]] = relationship(
         foreign_keys="Character.faction_id", back_populates="faction"
     )

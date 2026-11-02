@@ -33,27 +33,23 @@ class Actor(Base):
 
 
 class CharacterActor(Base):
-    """character_actors: which actor played or voiced which character, per media entry"""
+    """character_actors: which actor played or voiced which character"""
 
     __tablename__ = "character_actors"
     __table_args__ = (
         CheckConstraint("credit_type IN ('live_action', 'voice')"),
-        UniqueConstraint("character_id", "actor_id", "media_id"),
+        UniqueConstraint("character_id", "actor_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     character_id: Mapped[int] = mapped_column(
-        ForeignKey("characters.id", ondelete="CASCADE"), index=True
+        ForeignKey("characters.id", ondelete="CASCADE")
     )
     actor_id: Mapped[int] = mapped_column(
-        ForeignKey("actors.id", ondelete="CASCADE"), index=True
-    )
-    media_id: Mapped[int | None] = mapped_column(
-        ForeignKey("media.id", ondelete="SET NULL"), index=True
+        ForeignKey("actors.id", ondelete="CASCADE")
     )
     credit_type: Mapped[str | None] = mapped_column(String)
     notes: Mapped[str | None] = mapped_column(Text)
 
     character: Mapped[Character] = relationship(back_populates="actor_links")
     actor: Mapped[Actor] = relationship(back_populates="character_links")
-    media: Mapped[Media | None] = relationship()
