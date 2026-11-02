@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
@@ -11,6 +11,7 @@ class Vehicle(Base):
     """vehicles database table model (Eagle 5, Spaceball One, ...)"""
 
     __tablename__ = "vehicles"
+    __table_args__ = (Index("idx_vehicles_faction_id", "faction_id"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     vehicle_name: Mapped[str] = mapped_column(String)
@@ -18,7 +19,7 @@ class Vehicle(Base):
     description: Mapped[Optional[str]] = mapped_column(Text)
     parody_of: Mapped[Optional[str]] = mapped_column(String)
     faction_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("factions.id", ondelete="SET NULL"), index=True
+        ForeignKey("factions.id", ondelete="SET NULL")
     )
     image_url: Mapped[Optional[str]] = mapped_column(String)
     source_url: Mapped[Optional[str]] = mapped_column(String)
@@ -26,9 +27,6 @@ class Vehicle(Base):
 
     faction: Mapped[Optional["Faction"]] = relationship(back_populates="vehicles")
     crew: Mapped[list["VehicleCrew"]] = relationship(back_populates="vehicle")
-    media: Mapped[list["Media"]] = relationship(
-        secondary="media_vehicles", back_populates="vehicles"
-    )
     trivia: Mapped[list["Trivia"]] = relationship(foreign_keys="Trivia.vehicle_id")
     citations: Mapped[list["Citation"]] = relationship(foreign_keys="Citation.vehicle_id")
 
@@ -42,7 +40,7 @@ class VehicleCrew(Base):
         ForeignKey("vehicles.id", ondelete="CASCADE"), primary_key=True
     )
     character_id: Mapped[int] = mapped_column(
-        ForeignKey("characters.id", ondelete="CASCADE"), primary_key=True, index=True
+        ForeignKey("characters.id", ondelete="CASCADE"), primary_key=True
     )
     crew_role: Mapped[Optional[str]] = mapped_column(String)
 
