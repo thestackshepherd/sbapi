@@ -4,13 +4,13 @@ Spaceballs API (SBAPI) — a REST API for data from the 1987 film *Spaceballs*
 (characters, planets, vehicles, quotes, and more).
 
 **Status:** early scaffolding. The Flask app, Postgres schema, and
-SQLAlchemy models are in place. Only `GET /health` and `GET /characters`
+SQLAlchemy models are in place. Only `GET /api/health` and `GET /api/characters`
 are implemented; the other resources don't have routes yet.
 
 ## Stack
 
 - Python 3.15, managed with [uv](https://docs.astral.sh/uv/)
-- Flask + Gunicorn
+- Flask + Gunicorn, behind an nginx reverse proxy
 - PostgreSQL, accessed via SQLAlchemy + psycopg
 - Docker / Docker Compose for local dev
 - Terraform boilerplate for AWS deployment (see `src/sbapi/infra/`)
@@ -32,8 +32,11 @@ src/sbapi/
     routes/                    # Flask blueprints (in progress)
     scripts/                   # populate scripts (database_populate_*.py)
   infra/                  # Terraform for AWS (state backend + bootstrap)
+    local/
+      nginx/nginx.conf     # local reverse proxy: / -> web/, /api/ -> app replicas
+      web/index.html       # placeholder frontend served at /
 Dockerfile
-sbapi-compose.yaml        # local Postgres + app via Docker Compose
+sbapi-compose.yaml        # local Postgres + app replicas + nginx proxy
 ```
 
 ## Local development
@@ -44,8 +47,11 @@ uv sync
 docker compose -f sbapi-compose.yaml up
 ```
 
-This starts a Postgres container and the Flask app (via Gunicorn) in
-another container. On first start with an empty volume, Postgres loads
+This starts a Postgres container, three replicas of the Flask app (via
+Gunicorn, on port 8080 inside the container; set `APP_REPLICAS` to change the
+count) and an nginx proxy published on host port 8080 (`PROXY_HOST_PORT`). The
+proxy serves the placeholder frontend at `/` and load-balances `/api/` across
+the app replicas; the app containers publish no host ports. On first start with an empty volume, Postgres loads
 `src/sbapi/app/database/sbapi_devdb_schema.sql` automatically. That file drops
 and recreates every table, so after changing it you can re-run it against the
 running database instead of resetting the volume (this deletes all table data):
@@ -61,10 +67,11 @@ To start from a completely empty database, use
 Check it is up (the app container also has a healthcheck on this):
 
 ```sh
-curl localhost:8000/health        # {"status":"ok"} once the DB is reachable
-curl localhost:8000/characters    # [] until data is loaded
+curl localhost:8080/api/health        # {"status":"ok"} once the DB is reachable
+curl localhost:8080/api/characters    # [] until data is loaded
 ```
 
+Postgres is published on `127.0.0.1` only, at `DB_HOST_PORT` (default 5432).
 If port 5432 is already taken locally, set `DB_HOST_PORT` in `.env` (and
 `DATABASE_PORT` to match when running the populate scripts from your machine).
 
@@ -84,10 +91,13 @@ uv run populate   # inserts planets, actors, and characters
 ```
 
 The tables must already exist (see [Local development](#local-development)).
+`populate` runs on your machine and connects to the database directly over the
+loopback port (`DATABASE_HOST=localhost`, `DATABASE_PORT` = `DB_HOST_PORT`),
+not through the proxy.
 The scripts are safe to re-run: a row whose name is already in the table is
 skipped, not duplicated or updated.
 
-Tests: `uv run pytest` (there are no tests yet).
+Tests: `uv run pytest`.
 
 ## Deployment
 

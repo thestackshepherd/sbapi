@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-postgres}
       POSTGRES_DB: ${DATABASE_NAME:-sbapi_dev_db}
     ports:
-      - "${DB_HOST_PORT:-5432}:5432"
+      - "127.0.0.1:${DB_HOST_PORT:-5432}:5432"
     volumes:
       - sbapi_db_data:/var/lib/postgresql
       # Runs once, on first start of an empty volume.
@@ -34,8 +34,9 @@ services:
       DATABASE_HOST: db
       DATABASE_PORT: 5432
       DATABASE_NAME: ${DATABASE_NAME:-sbapi_dev_db}
-    ports:
-      - "8000:8000"
+      FORWARDED_ALLOW_IPS: "*"
+    deploy:
+      replicas: ${APP_REPLICAS:-3}
     depends_on:
       db:
         condition: service_healthy
@@ -45,11 +46,23 @@ services:
           "CMD",
           "python",
           "-c",
-          "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health')",
         ]
       interval: 10s
       timeout: 5s
       retries: 5
+
+  proxy:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "${PROXY_HOST_PORT:-8080}:80"
+    volumes:
+      - ./src/sbapi/infra/local/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./src/sbapi/infra/local/web:/usr/share/nginx/html:ro
+    depends_on:
+      app:
+        condition: service_healthy
 
 volumes:
   sbapi_db_data:
