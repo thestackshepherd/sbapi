@@ -15,7 +15,6 @@ def serialize_character(character: Character) -> dict:
         "gender": character.gender,
         "character_role": character.character_role,
         "parody_of": character.parody_of,
-        "faction_id": character.faction_id,
         "homeworld_id": character.homeworld_id,
         "image_url": character.image_url,
         "source_url": character.source_url,

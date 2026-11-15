@@ -18,7 +18,7 @@ class Quote(Base):
     character_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("characters.id", ondelete="SET NULL")
     )
-    source_url: Mapped[Optional[str]] = mapped_column(String)
+    source_url: Mapped[Optional[str]] = mapped_column(String(2048))
     last_updated: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
     character: Mapped[Optional["Character"]] = relationship(back_populates="quotes")

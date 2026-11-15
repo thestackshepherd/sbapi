@@ -11,24 +11,17 @@ class Vehicle(Base):
     """vehicles database table model (Eagle 5, Spaceball One, ...)"""
 
     __tablename__ = "vehicles"
-    __table_args__ = (
-        Index("idx_vehicles_name", "vehicle_name"),
-        Index("idx_vehicles_faction_id", "faction_id"),
-    )
+    __table_args__ = (Index("idx_vehicles_name", "vehicle_name"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    vehicle_name: Mapped[str] = mapped_column(String)
-    vehicle_type: Mapped[Optional[str]] = mapped_column(String)
+    vehicle_name: Mapped[str] = mapped_column(String(2048))
+    vehicle_type: Mapped[Optional[str]] = mapped_column(String(2048))
     description: Mapped[Optional[str]] = mapped_column(Text)
-    parody_of: Mapped[Optional[str]] = mapped_column(String)
-    faction_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("factions.id", ondelete="SET NULL")
-    )
-    image_url: Mapped[Optional[str]] = mapped_column(String)
-    source_url: Mapped[Optional[str]] = mapped_column(String)
+    parody_of: Mapped[Optional[str]] = mapped_column(String(2048))
+    image_url: Mapped[Optional[str]] = mapped_column(String(2048))
+    source_url: Mapped[Optional[str]] = mapped_column(String(2048))
     last_updated: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
 
-    faction: Mapped[Optional["Faction"]] = relationship(back_populates="vehicles")
     crew: Mapped[list["VehicleCrew"]] = relationship(back_populates="vehicle")
     trivia: Mapped[list["Trivia"]] = relationship(foreign_keys="Trivia.vehicle_id")
     citations: Mapped[list["Citation"]] = relationship(
@@ -48,7 +41,7 @@ class VehicleCrew(Base):
     character_id: Mapped[int] = mapped_column(
         ForeignKey("characters.id", ondelete="CASCADE"), primary_key=True
     )
-    crew_role: Mapped[Optional[str]] = mapped_column(String)
+    crew_role: Mapped[Optional[str]] = mapped_column(String(2048))
 
     vehicle: Mapped["Vehicle"] = relationship(back_populates="crew")
     character: Mapped["Character"] = relationship(back_populates="crew_roles")

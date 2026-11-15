@@ -1,7 +1,7 @@
 # sbapi
 
 Spaceballs API (SBAPI) — a REST API for data from the 1987 film *Spaceballs*
-(characters, planets, factions, vehicles, quotes, and more).
+(characters, planets, vehicles, quotes, and more).
 
 **Status:** early scaffolding. The Flask app, Postgres schema, and
 SQLAlchemy models are in place. Only `GET /health` and `GET /characters`
@@ -74,12 +74,13 @@ Data comes from the film itself (its credits and script) and reference sites suc
 as the [Spaceballs Wiki](https://spaceballs.fandom.com) (CC BY-SA 3.0). Values
 that can't be sourced are left null, never guessed.
 
-Each table is filled by a script in `src/sbapi/app/scripts/`, installed as a
-console command. Run them from the repo root so `.env` is found:
+The tables are filled by `src/sbapi/app/scripts/database_populate_main.py`,
+installed as a console command. The data it inserts lives in the sibling
+`database_populate_{planets,actors,characters}.py` modules. Run it from the
+repo root so `.env` is found:
 
 ```sh
-uv run populate_actors    # inserts the cast into the actors table
-uv run populate_planets   # inserts the planets, moons, and stations into the planets table
+uv run populate   # inserts planets, actors, and characters
 ```
 
 The tables must already exist (see [Local development](#local-development)).

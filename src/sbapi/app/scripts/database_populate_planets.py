@@ -1,12 +1,9 @@
 """
-Script populates the planets table
+Data for the planets table (planets, moons, and stations).
+
+Populating logic lives in database_populate_main.py.
 """
 from datetime import UTC, datetime
-
-from sqlalchemy import select
-
-from sbapi.app.database import SbapiDbConnection
-from sbapi.app.models import Planet
 
 planet_spaceball_description = """Home of the Spaceballs. Has squandered its own air,
 so it schemes to steal Druidia's atmosphere."""
@@ -75,22 +72,3 @@ PLANETS = [
     },
 ]
 
-
-def main() -> None:
-    """
-    populate planets table with data defined in the PLANETS var.
-    """
-    sbapidb_connection = SbapiDbConnection()
-    with sbapidb_connection.get_session() as session:
-        for row in PLANETS:
-            exists = session.scalar(select(Planet).where(Planet.name == row["name"]))
-            if exists:
-                print(f"skipped {row['name']} (already exists)")
-                continue
-            session.add(Planet(**row))
-            print(f"added {row['name']}")
-        session.commit()
-
-
-if __name__ == "__main__":
-    main()

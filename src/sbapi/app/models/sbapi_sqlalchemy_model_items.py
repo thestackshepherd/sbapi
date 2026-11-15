@@ -28,15 +28,15 @@ class Item(Base):
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    item_name: Mapped[str] = mapped_column(String)
-    item_type: Mapped[str] = mapped_column(String)
+    item_name: Mapped[str] = mapped_column(String(2048))
+    item_type: Mapped[str] = mapped_column(String(2048))
     description: Mapped[str | None] = mapped_column(Text)
-    parody_of: Mapped[str | None] = mapped_column(String)
+    parody_of: Mapped[str | None] = mapped_column(String(2048))
     owner_character_id: Mapped[int | None] = mapped_column(
         ForeignKey("characters.id", ondelete="SET NULL")
     )
-    image_url: Mapped[str | None] = mapped_column(String)
-    source_url: Mapped[str | None] = mapped_column(String)
+    image_url: Mapped[str | None] = mapped_column(String(2048))
+    source_url: Mapped[str | None] = mapped_column(String(2048))
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     owner: Mapped[Character | None] = relationship(back_populates="items")

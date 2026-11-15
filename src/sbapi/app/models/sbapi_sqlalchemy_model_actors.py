@@ -29,7 +29,7 @@ class Actor(Base):
     __table_args__ = (Index("idx_actors", "actor_name"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    actor_name: Mapped[str] = mapped_column(String, unique=True)
+    actor_name: Mapped[str] = mapped_column(String(2048), unique=True)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     character_links: Mapped[list[CharacterActor]] = relationship(back_populates="actor")
@@ -50,7 +50,7 @@ class CharacterActor(Base):
         ForeignKey("characters.id", ondelete="CASCADE")
     )
     actor_id: Mapped[int] = mapped_column(ForeignKey("actors.id", ondelete="CASCADE"))
-    credit_type: Mapped[str | None] = mapped_column(String)
+    credit_type: Mapped[str | None] = mapped_column(String(2048))
     notes: Mapped[str | None] = mapped_column(Text)
 
     character: Mapped[Character] = relationship(back_populates="actor_links")

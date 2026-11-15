@@ -13,30 +13,23 @@ class Character(Base):
     __tablename__ = "characters"
     __table_args__ = (
         Index("idx_characters_name", "character_name"),
-        Index("idx_characters_faction_id", "faction_id"),
         Index("idx_characters_homeworld_id", "homeworld_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    character_name: Mapped[str] = mapped_column(String)
-    full_name: Mapped[str | None] = mapped_column(String)
-    species: Mapped[str | None] = mapped_column(String)
-    gender: Mapped[str | None] = mapped_column(String)
-    character_role: Mapped[str | None] = mapped_column(String)
-    parody_of: Mapped[str | None] = mapped_column(String)
-    faction_id: Mapped[int | None] = mapped_column(
-        ForeignKey("factions.id", ondelete="SET NULL")
-    )
+    character_name: Mapped[str] = mapped_column(String(2048))
+    full_name: Mapped[str | None] = mapped_column(String(2048))
+    species: Mapped[str | None] = mapped_column(String(2048))
+    gender: Mapped[str | None] = mapped_column(String(2048))
+    character_role: Mapped[str | None] = mapped_column(String(2048))
+    parody_of: Mapped[str | None] = mapped_column(String(2048))
     homeworld_id: Mapped[int | None] = mapped_column(
-        ForeignKey("locations.id", ondelete="SET NULL")
+        ForeignKey("planets.id", ondelete="SET NULL")
     )
-    image_url: Mapped[str | None] = mapped_column(String)
-    source_url: Mapped[str | None] = mapped_column(String)
+    image_url: Mapped[str | None] = mapped_column(String(2048))
+    source_url: Mapped[str | None] = mapped_column(String(2048))
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    faction: Mapped[Faction | None] = relationship(
-        foreign_keys=[faction_id], back_populates="members"
-    )
-    homeworld: Mapped[Location | None] = relationship(
+    homeworld: Mapped[Planet | None] = relationship(
         foreign_keys=[homeworld_id], back_populates="natives"
     )
     actor_links: Mapped[list[CharacterActor]] = relationship(back_populates="character")

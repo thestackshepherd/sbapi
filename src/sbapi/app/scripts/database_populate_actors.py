@@ -1,13 +1,10 @@
 """
-populate the actor table
+Data for the actors table (real-world cast members).
+
+Populating logic lives in database_populate_main.py.
 """
 
 from datetime import UTC, datetime
-
-from sqlalchemy import select
-
-from sbapi.app.database import SbapiDbConnection
-from sbapi.app.models import Actor
 
 ACTORS = [
     {"actor_name": "Mel Brooks", "last_updated": datetime.now(UTC)},
@@ -61,23 +58,3 @@ ACTORS = [
     {"actor_name": "Brenda Strong", "last_updated": datetime.now(UTC)},
     {"actor_name": "Dom DeLuise", "last_updated": datetime.now(UTC)},
 ]
-
-def main() -> None:
-    """
-    populate actor table with data defined in the ACTORS var.
-    """
-    sbapidb_connection = SbapiDbConnection()
-    with sbapidb_connection.get_session() as session:
-        for row in ACTORS:
-            exists = session.scalar(
-                select(Actor).where(Actor.actor_name == row["actor_name"])
-            )
-            if not exists:
-                session.add(Actor(**row, last_updated=datetime.now(UTC)))
-            else:
-                continue
-        session.commit()
-
-
-if __name__ == "__main__":
-    main()
