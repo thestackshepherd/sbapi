@@ -3,7 +3,7 @@ from flask import Blueprint, current_app, jsonify
 from sbapi.app.models import Character
 from sbapi.app.repositories.sbapi_sqlalchemy_repo_characters import CharacterRepository
 
-characters_bp = Blueprint("characters", __name__, url_prefix="/characters")
+characters_bp = Blueprint("characters", __name__, url_prefix="/api/characters")
 
 
 def serialize_character(character: Character) -> dict:
