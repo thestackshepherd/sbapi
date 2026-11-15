@@ -72,9 +72,10 @@ def main() -> None:
             exists = session.scalar(
                 select(Actor).where(Actor.actor_name == row["actor_name"])
             )
-            if exists:
+            if not exists:
+                session.add(Actor(**row, last_updated=datetime.now(UTC)))
+            else:
                 continue
-            session.add(Actor(**row, last_updated=datetime.now(UTC)))
         session.commit()
 
 

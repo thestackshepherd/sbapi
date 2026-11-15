@@ -6,7 +6,7 @@ CHECK that exactly one is set.
 
 from typing import Optional
 
-from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text
+from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
@@ -22,6 +22,12 @@ class Trivia(Base):
             "num_nonnulls(character_id, location_id, faction_id, vehicle_id, "
             "item_id, actor_id) = 1"
         ),
+        Index("idx_trivia_character_id", "character_id"),
+        Index("idx_trivia_location_id", "location_id"),
+        Index("idx_trivia_faction_id", "faction_id"),
+        Index("idx_trivia_vehicle_id", "vehicle_id"),
+        Index("idx_trivia_item_id", "item_id"),
+        Index("idx_trivia_actor_id", "actor_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -56,6 +62,13 @@ class Citation(Base):
             "num_nonnulls(character_id, location_id, faction_id, vehicle_id, "
             "item_id, actor_id, quote_id) = 1"
         ),
+        Index("idx_citations_character_id", "character_id"),
+        Index("idx_citations_location_id", "location_id"),
+        Index("idx_citations_faction_id", "faction_id"),
+        Index("idx_citations_vehicle_id", "vehicle_id"),
+        Index("idx_citations_item_id", "item_id"),
+        Index("idx_citations_actor_id", "actor_id"),
+        Index("idx_citations_quote_id", "quote_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

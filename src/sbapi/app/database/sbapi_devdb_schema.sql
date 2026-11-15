@@ -1,7 +1,5 @@
 --- Space Balls API database schema ---------
 
---- Actor Tables ---------
-
 --- actors: Stores real-world cast members. ---------
 DROP TABLE IF EXISTS actors CASCADE;
 CREATE TABLE actors (
@@ -9,37 +7,24 @@ CREATE TABLE actors (
     actor_name    VARCHAR UNIQUE NOT NULL,
     last_updated  TIMESTAMPTZ
 );
+CREATE INDEX CONCURRENTLY idx_actors ON actors (actor_name);
 
---- Faction Tables ---------
-
---- factions: Stores the groups characters and vehicles belong to. ---------
-DROP TABLE IF EXISTS factions CASCADE;
-CREATE TABLE factions (
-    id SERIAL PRIMARY KEY,
-    faction_name VARCHAR NOT NULL,
-    description TEXT,
-    parody_of VARCHAR,
-    image_url VARCHAR,
-    source_url VARCHAR,
-    last_updated TIMESTAMPTZ
-);
-
---- Location Tables ---------
 
 --- locations: Stores planets, moons, and other settings. ---------
-DROP TABLE IF EXISTS locations CASCADE;
-CREATE TABLE locations (
+DROP TABLE IF EXISTS planets CASCADE;
+CREATE TABLE planets(
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
-    location_type VARCHAR,
+    ruler_id VARCHAR,
+    planet_type VARCHAR,
     description TEXT,
+    government VARCHAR,
+    capital VARCHAR,
     parody_of VARCHAR,
-    image_url VARCHAR,
-    source_url VARCHAR,
     last_updated TIMESTAMPTZ
 );
 
---- Character Tables ---------
+CREATE INDEX CONCURRENTLY idx_planets ON planets(name);
 
 --- characters: Stores characters in the film. ---------
 DROP TABLE IF EXISTS characters CASCADE;
@@ -58,7 +43,9 @@ CREATE TABLE characters (
     last_updated TIMESTAMPTZ
 );
 
---- Vehicle Tables ---------
+CREATE INDEX CONCURRENTLY idx_characters_name ON characters (character_name);
+CREATE INDEX CONCURRENTLY idx_characters_faction_id ON characters (faction_id);
+CREATE INDEX CONCURRENTLY idx_characters_homeworld_id ON characters (homeworld_id);
 
 --- vehicles: Stores ships and other vehicles. ---------
 DROP TABLE IF EXISTS vehicles CASCADE;
@@ -74,8 +61,8 @@ CREATE TABLE vehicles (
     last_updated TIMESTAMPTZ
 );
 
-
---- Item Tables ---------
+CREATE INDEX CONCURRENTLY idx_vehicles_name ON vehicles (vehicle_name);
+CREATE INDEX CONCURRENTLY idx_vehicles_faction_id ON vehicles (faction_id);
 
 --- items: Stores weapons, artifacts, tech, and merchandise. ---------
 DROP TABLE IF EXISTS items CASCADE;
@@ -92,7 +79,8 @@ CREATE TABLE items (
     last_updated TIMESTAMPTZ
 );
 
---- Quote Tables ---------
+CREATE INDEX CONCURRENTLY idx_items_name ON items (item_name);
+CREATE INDEX CONCURRENTLY idx_items_owner_character_id ON items (owner_character_id);
 
 --- quotes: Stores lines of dialogue. ---------
 DROP TABLE IF EXISTS quotes CASCADE;
@@ -104,7 +92,7 @@ CREATE TABLE quotes (
     last_updated TIMESTAMPTZ
 );
 
---- Relationship Tables ---------
+CREATE INDEX CONCURRENTLY idx_quotes_character_id ON quotes (character_id);
 
 --- character_actors: Links a character to the actor(s) who played or voiced them. ---------
 DROP TABLE IF EXISTS character_actors CASCADE;
@@ -118,6 +106,8 @@ CREATE TABLE character_actors (
     UNIQUE (character_id, actor_id)
 );
 
+CREATE INDEX CONCURRENTLY idx_character_actors_actor_id ON character_actors (actor_id);
+
 --- vehicle_crew: Who is aboard a vehicle, and in what role (pilot, co-pilot, captain, ...). ---------
 DROP TABLE IF EXISTS vehicle_crew CASCADE;
 CREATE TABLE vehicle_crew (
@@ -127,10 +117,7 @@ CREATE TABLE vehicle_crew (
     PRIMARY KEY (vehicle_id, character_id)
 );
 
---- Annotation Tables ---------
---- Both use one nullable foreign key per entity, with a CHECK that exactly one is set. ---------
---- That keeps real foreign keys (and cascades) while replacing a trivia/references ---------
---- table pair per entity with one table each. ---------
+CREATE INDEX CONCURRENTLY idx_vehicle_crew_character_id ON vehicle_crew (character_id);
 
 --- trivia: Stores trivia and behind-the-scenes notes for any entity. ---------
 DROP TABLE IF EXISTS trivia CASCADE;
@@ -149,6 +136,13 @@ CREATE TABLE trivia (
                         item_id, actor_id) = 1)
 );
 
+CREATE INDEX CONCURRENTLY idx_trivia_character_id ON trivia (character_id);
+CREATE INDEX CONCURRENTLY idx_trivia_location_id ON trivia (location_id);
+CREATE INDEX CONCURRENTLY idx_trivia_faction_id ON trivia (faction_id);
+CREATE INDEX CONCURRENTLY idx_trivia_vehicle_id ON trivia (vehicle_id);
+CREATE INDEX CONCURRENTLY idx_trivia_item_id ON trivia (item_id);
+CREATE INDEX CONCURRENTLY idx_trivia_actor_id ON trivia (actor_id);
+
 --- citations: Stores numbered sources backing any entity's data. ---------
 DROP TABLE IF EXISTS citations CASCADE;
 CREATE TABLE citations (
@@ -166,3 +160,11 @@ CREATE TABLE citations (
     CHECK (num_nonnulls(character_id, location_id, faction_id, vehicle_id,
                         item_id, actor_id, quote_id) = 1)
 );
+
+CREATE INDEX CONCURRENTLY idx_citations_character_id ON citations (character_id);
+CREATE INDEX CONCURRENTLY idx_citations_location_id ON citations (location_id);
+CREATE INDEX CONCURRENTLY idx_citations_faction_id ON citations (faction_id);
+CREATE INDEX CONCURRENTLY idx_citations_vehicle_id ON citations (vehicle_id);
+CREATE INDEX CONCURRENTLY idx_citations_item_id ON citations (item_id);
+CREATE INDEX CONCURRENTLY idx_citations_actor_id ON citations (actor_id);
+CREATE INDEX CONCURRENTLY idx_citations_quote_id ON citations (quote_id);

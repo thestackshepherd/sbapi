@@ -1,10 +1,14 @@
+"""
+SQLAlchemy ORM Model file represents the Actors table in the sbapi database.
+"""
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     CheckConstraint,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -14,19 +18,21 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
 
+if TYPE_CHECKING:
+    from sbapi.app.models.sbapi_sqlalchemy_model_characters import Character
+
 
 class Actor(Base):
     """actors database table model (real-world cast members)"""
 
     __tablename__ = "actors"
+    __table_args__ = (Index("idx_actors", "actor_name"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     actor_name: Mapped[str] = mapped_column(String, unique=True)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     character_links: Mapped[list[CharacterActor]] = relationship(back_populates="actor")
-    trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.actor_id")
-    citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.actor_id")
 
 
 class CharacterActor(Base):
@@ -36,6 +42,7 @@ class CharacterActor(Base):
     __table_args__ = (
         CheckConstraint("credit_type IN ('live_action', 'voice')"),
         UniqueConstraint("character_id", "actor_id"),
+        Index("idx_character_actors_actor_id", "actor_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

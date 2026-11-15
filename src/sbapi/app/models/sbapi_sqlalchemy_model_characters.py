@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
@@ -11,6 +11,11 @@ class Character(Base):
     """characters database table model"""
 
     __tablename__ = "characters"
+    __table_args__ = (
+        Index("idx_characters_name", "character_name"),
+        Index("idx_characters_faction_id", "faction_id"),
+        Index("idx_characters_homeworld_id", "homeworld_id"),
+    )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     character_name: Mapped[str] = mapped_column(String)

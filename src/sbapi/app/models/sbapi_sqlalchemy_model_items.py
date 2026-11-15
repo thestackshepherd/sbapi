@@ -5,6 +5,7 @@ from sqlalchemy import (
     CheckConstraint,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -22,6 +23,8 @@ class Item(Base):
         CheckConstraint(
             "item_type IN ('weapon', 'artifact', 'tech', 'merchandise', 'other')"
         ),
+        Index("idx_items_name", "item_name"),
+        Index("idx_items_owner_character_id", "owner_character_id"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
