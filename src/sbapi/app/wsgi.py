@@ -24,7 +24,7 @@ class GunicornApplication(BaseApplication):
 
 def main() -> None:
     options = {
-        "bind": os.getenv("SBAPI_BIND", "0.0.0.0:8000"),
+        "bind": os.getenv("SBAPI_BIND", "0.0.0.0:8080"),
         "workers": int(os.getenv("SBAPI_WORKERS", "4")),
     }
     GunicornApplication(app, options).run()
