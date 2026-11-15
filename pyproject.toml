@@ -26,6 +26,7 @@ dev = [
 [project.scripts]
 sbapi = "sbapi.app.wsgi:main"
 populate_actors = "sbapi.app.scripts.database_populate_actors:main"
+populate_planets = "sbapi.app.scripts.database_populate_planets:main"
 
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]

@@ -1,10 +1,11 @@
 # sbapi
 
 Spaceballs API (SBAPI) — a REST API for data from the 1987 film *Spaceballs*
-(characters, locations, factions, spacecraft, quotes, and more).
+(characters, planets, factions, vehicles, quotes, and more).
 
 **Status:** early scaffolding. The Flask app, Postgres schema, and
-SQLAlchemy models are in place; the HTTP routes are still empty stubs.
+SQLAlchemy models are in place. Only `GET /health` and `GET /characters`
+are implemented; the other resources don't have routes yet.
 
 ## Stack
 
@@ -18,16 +19,18 @@ SQLAlchemy models are in place; the HTTP routes are still empty stubs.
 
 ```
 src/sbapi/
-  main.py                 # Flask app factory
-  wsgi.py                 # Gunicorn entry point
   app/
+    main.py                    # Flask app factory
+    wsgi.py                    # Gunicorn entry point
     database/
       connection.py            # SQLAlchemy engine setup
       sbapi_devdb_schema.sql   # dev schema: drops and recreates every table
+      sbapi_prod_schema.sql    # production schema
       sbapidb_rebase.sql       # wipes the public schema entirely
     models/                    # SQLAlchemy models
+    repositories/              # database queries used by the routes
     routes/                    # Flask blueprints (in progress)
-    scripts/                   # populate scripts (e.g. database_populate_actors.py)
+    scripts/                   # populate scripts (database_populate_*.py)
   infra/                  # Terraform for AWS (state backend + bootstrap)
 Dockerfile
 sbapi-compose.yaml        # local Postgres + app via Docker Compose
@@ -75,10 +78,15 @@ Each table is filled by a script in `src/sbapi/app/scripts/`, installed as a
 console command. Run them from the repo root so `.env` is found:
 
 ```sh
-uv run populate_actors   # inserts the cast into the actors table
+uv run populate_actors    # inserts the cast into the actors table
+uv run populate_planets   # inserts the planets, moons, and stations into the planets table
 ```
 
-Tests: `uv run pytest`.
+The tables must already exist (see [Local development](#local-development)).
+The scripts are safe to re-run: a row whose name is already in the table is
+skipped, not duplicated or updated.
+
+Tests: `uv run pytest` (there are no tests yet).
 
 ## Deployment
 
