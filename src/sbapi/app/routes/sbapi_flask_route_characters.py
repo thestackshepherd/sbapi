@@ -1,6 +1,5 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, current_app, jsonify
 
-from sbapi.app.database.connection import SessionLocal
 from sbapi.app.models import Character
 from sbapi.app.repositories.sbapi_sqlalchemy_repo_characters import CharacterRepository
 
@@ -20,12 +19,14 @@ def serialize_character(character: Character) -> dict:
         "homeworld_id": character.homeworld_id,
         "image_url": character.image_url,
         "source_url": character.source_url,
-        "last_updated": character.last_updated.isoformat() if character.last_updated else None,
+        "last_updated": character.last_updated.isoformat()
+        if character.last_updated
+        else None,
     }
 
 
 @characters_bp.get("")
 def list_characters():
-    with SessionLocal() as session:
+    with current_app.extensions["sbapidb_connection"].get_session() as session:
         characters = CharacterRepository(session).list_all()
         return jsonify([serialize_character(c) for c in characters])

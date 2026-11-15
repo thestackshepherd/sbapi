@@ -25,4 +25,6 @@ class Faction(Base):
     )
     vehicles: Mapped[list["Vehicle"]] = relationship(back_populates="faction")
     trivia: Mapped[list["Trivia"]] = relationship(foreign_keys="Trivia.faction_id")
-    citations: Mapped[list["Citation"]] = relationship(foreign_keys="Citation.faction_id")
+    citations: Mapped[list["Citation"]] = relationship(
+        foreign_keys="Citation.faction_id"
+    )

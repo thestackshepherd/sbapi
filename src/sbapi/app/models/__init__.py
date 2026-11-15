@@ -1,4 +1,5 @@
 """Import every model so they all register on the shared Base.metadata."""
+
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
 from sbapi.app.models.sbapi_sqlalchemy_model_actors import Actor, CharacterActor
 from sbapi.app.models.sbapi_sqlalchemy_model_factions import Faction

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
@@ -11,7 +11,6 @@ class Vehicle(Base):
     """vehicles database table model (Eagle 5, Spaceball One, ...)"""
 
     __tablename__ = "vehicles"
-    __table_args__ = (Index("idx_vehicles_faction_id", "faction_id"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     vehicle_name: Mapped[str] = mapped_column(String)
@@ -28,7 +27,9 @@ class Vehicle(Base):
     faction: Mapped[Optional["Faction"]] = relationship(back_populates="vehicles")
     crew: Mapped[list["VehicleCrew"]] = relationship(back_populates="vehicle")
     trivia: Mapped[list["Trivia"]] = relationship(foreign_keys="Trivia.vehicle_id")
-    citations: Mapped[list["Citation"]] = relationship(foreign_keys="Citation.vehicle_id")
+    citations: Mapped[list["Citation"]] = relationship(
+        foreign_keys="Citation.vehicle_id"
+    )
 
 
 class VehicleCrew(Base):

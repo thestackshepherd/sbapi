@@ -3,6 +3,7 @@
 Each row points at exactly one entity: one nullable FK per entity type, with a
 CHECK that exactly one is set.
 """
+
 from typing import Optional
 
 from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text
@@ -26,12 +27,24 @@ class Trivia(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     trivia_kind: Mapped[str] = mapped_column(String, server_default="trivia")
     trivia_text: Mapped[str] = mapped_column(Text)
-    character_id: Mapped[Optional[int]] = mapped_column(ForeignKey("characters.id", ondelete="CASCADE"))
-    location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id", ondelete="CASCADE"))
-    faction_id: Mapped[Optional[int]] = mapped_column(ForeignKey("factions.id", ondelete="CASCADE"))
-    vehicle_id: Mapped[Optional[int]] = mapped_column(ForeignKey("vehicles.id", ondelete="CASCADE"))
-    item_id: Mapped[Optional[int]] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
-    actor_id: Mapped[Optional[int]] = mapped_column(ForeignKey("actors.id", ondelete="CASCADE"))
+    character_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("characters.id", ondelete="CASCADE")
+    )
+    location_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("locations.id", ondelete="CASCADE")
+    )
+    faction_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("factions.id", ondelete="CASCADE")
+    )
+    vehicle_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("vehicles.id", ondelete="CASCADE")
+    )
+    item_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("items.id", ondelete="CASCADE")
+    )
+    actor_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("actors.id", ondelete="CASCADE")
+    )
 
 
 class Citation(Base):
@@ -49,10 +62,24 @@ class Citation(Base):
     citation_number: Mapped[int] = mapped_column(Integer)
     source_text: Mapped[str] = mapped_column(Text)
     source_url: Mapped[Optional[str]] = mapped_column(String)
-    character_id: Mapped[Optional[int]] = mapped_column(ForeignKey("characters.id", ondelete="CASCADE"))
-    location_id: Mapped[Optional[int]] = mapped_column(ForeignKey("locations.id", ondelete="CASCADE"))
-    faction_id: Mapped[Optional[int]] = mapped_column(ForeignKey("factions.id", ondelete="CASCADE"))
-    vehicle_id: Mapped[Optional[int]] = mapped_column(ForeignKey("vehicles.id", ondelete="CASCADE"))
-    item_id: Mapped[Optional[int]] = mapped_column(ForeignKey("items.id", ondelete="CASCADE"))
-    actor_id: Mapped[Optional[int]] = mapped_column(ForeignKey("actors.id", ondelete="CASCADE"))
-    quote_id: Mapped[Optional[int]] = mapped_column(ForeignKey("quotes.id", ondelete="CASCADE"))
+    character_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("characters.id", ondelete="CASCADE")
+    )
+    location_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("locations.id", ondelete="CASCADE")
+    )
+    faction_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("factions.id", ondelete="CASCADE")
+    )
+    vehicle_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("vehicles.id", ondelete="CASCADE")
+    )
+    item_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("items.id", ondelete="CASCADE")
+    )
+    actor_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("actors.id", ondelete="CASCADE")
+    )
+    quote_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("quotes.id", ondelete="CASCADE")
+    )

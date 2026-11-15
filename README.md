@@ -23,13 +23,11 @@ src/sbapi/
   app/
     database/
       connection.py            # SQLAlchemy engine setup
-      sbapidatabase_schema.sql # Postgres schema (tables, indexes)
+      sbapi_devdb_schema.sql   # dev schema: drops and recreates every table
+      sbapidb_rebase.sql       # wipes the public schema entirely
     models/                    # SQLAlchemy models
     routes/                    # Flask blueprints (in progress)
-  ingest/                 # wiki -> JSON -> Postgres data pipeline
-schemas/scrape/           # JSON Schemas for wiki-scraped records
-data/sample/              # a few hand-checked records for trying the loader
-tests/
+    scripts/                   # populate scripts (e.g. database_populate_actors.py)
   infra/                  # Terraform for AWS (state backend + bootstrap)
 Dockerfile
 sbapi-compose.yaml        # local Postgres + app via Docker Compose
@@ -45,8 +43,17 @@ docker compose -f sbapi-compose.yaml up
 
 This starts a Postgres container and the Flask app (via Gunicorn) in
 another container. On first start with an empty volume, Postgres loads
-`src/sbapi/app/database/sbapidatabase_schema.sql` automatically. If you change
-the schema, reset with `docker compose -f sbapi-compose.yaml down -v`.
+`src/sbapi/app/database/sbapi_devdb_schema.sql` automatically. That file drops
+and recreates every table, so after changing it you can re-run it against the
+running database instead of resetting the volume (this deletes all table data):
+
+```sh
+docker compose -f sbapi-compose.yaml exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"' \
+  < src/sbapi/app/database/sbapi_devdb_schema.sql
+```
+
+To start from a completely empty database, use
+`docker compose -f sbapi-compose.yaml down -v`.
 
 Check it is up (the app container also has a healthcheck on this):
 
@@ -56,39 +63,22 @@ curl localhost:8000/characters    # [] until data is loaded
 ```
 
 If port 5432 is already taken locally, set `DB_HOST_PORT` in `.env` (and
-`DATABASE_PORT` to match when running the ingest commands from your machine).
-
-To get data in quickly, load the sourced sample records (see below):
-`cd src && uv run --extra ingest python -m sbapi.ingest load ../data/sample`.
+`DATABASE_PORT` to match when running the populate scripts from your machine).
 
 ## Loading data
 
-Data comes from the [Spaceballs Wiki](https://spaceballs.fandom.com) (CC BY-SA 3.0).
-The pipeline lives in `src/sbapi/ingest/`:
+Data comes from the film itself (its credits and script) and reference sites such
+as the [Spaceballs Wiki](https://spaceballs.fandom.com) (CC BY-SA 3.0). Values
+that can't be sourced are left null, never guessed.
+
+Each table is filled by a script in `src/sbapi/app/scripts/`, installed as a
+console command. Run them from the repo root so `.env` is found:
 
 ```sh
-uv sync --extra ingest
-cd src
-python -m sbapi.ingest scrape --limit 20   # trial run: live wiki API -> ../data/scrape/
-python -m sbapi.ingest scrape              # everything (1 request/second, cached in .cache/wiki)
-python -m sbapi.ingest validate            # check records against schemas/scrape/
-python -m sbapi.ingest load                # insert into Postgres (DATABASE_* env vars)
+uv run populate_actors   # inserts the cast into the actors table
 ```
 
-- **Scrape** uses `api.php`, which the wiki's robots.txt allows for general
-  bots. It checks robots.txt for its own user agent, waits between requests,
-  and caches every response, so re-runs are cheap. Run it from your own
-  machine: the wiki blocks Anthropic's crawler.
-- `python -m sbapi.ingest dump FILE` reads a MediaWiki XML dump instead
-  (download from the wiki's Special:Statistics page), with no network at all.
-- Each run writes `_report.json` with the categories and infobox fields the
-  wiki uses that `ingest/config.py` doesn't map yet. Tune the config from it.
-- **Load** is idempotent and runs in one transaction. Names that match no
-  record are left null and listed, never guessed.
-- `data/sample/` holds four pages' worth of records to try the loader:
-  `python -m sbapi.ingest load ../data/sample`.
-
-Tests: `uv run pytest` (set `SBAPI_TEST_DSN` to include the Postgres load test).
+Tests: `uv run pytest`.
 
 ## Deployment
 

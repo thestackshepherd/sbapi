@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, Text
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
@@ -11,7 +11,6 @@ class Quote(Base):
     """quotes database table model (lines of dialogue)"""
 
     __tablename__ = "quotes"
-    __table_args__ = (Index("idx_quotes_character_id", "character_id"),)
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     quote_text: Mapped[str] = mapped_column(Text)

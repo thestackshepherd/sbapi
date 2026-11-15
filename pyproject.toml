@@ -3,6 +3,7 @@ name = "sbapi"
 version = "0.1.0"
 description = "Space Balls API (SBAPI) - The SpaceBalls API"
 readme = "README.md"
+
 authors = [
     { name = "thestackshepherd", email = "jadenmschwartz00@gmail.com" }
 ]
@@ -17,13 +18,6 @@ dependencies = [
     "sqlalchemy>=2.0.51",
 ]
 
-[project.optional-dependencies]
-# Wiki -> Postgres data pipeline (src/sbapi/ingest). `uv sync --extra ingest`
-ingest = [
-    "jsonschema>=4.23",
-    "mwparserfromhell>=0.6.6",
-]
-
 [dependency-groups]
 dev = [
     "pytest>=8.3",
@@ -31,6 +25,7 @@ dev = [
 
 [project.scripts]
 sbapi = "sbapi.app.wsgi:main"
+populate_actors = "sbapi.app.scripts.database_populate_actors:main"
 
 [build-system]
 requires = ["uv_build>=0.12.3,<0.13.0"]

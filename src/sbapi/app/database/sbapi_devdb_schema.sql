@@ -3,18 +3,18 @@
 --- Actor Tables ---------
 
 --- actors: Stores real-world cast members. ---------
-CREATE TABLE IF NOT EXISTS actors (
+DROP TABLE IF EXISTS actors CASCADE;
+CREATE TABLE actors (
     id            SERIAL  PRIMARY KEY,
-    actor_name    VARCHAR NOT NULL,
-    image_url     VARCHAR,
-    source_url    VARCHAR,
+    actor_name    VARCHAR UNIQUE NOT NULL,
     last_updated  TIMESTAMPTZ
 );
 
 --- Faction Tables ---------
 
 --- factions: Stores the groups characters and vehicles belong to. ---------
-CREATE TABLE IF NOT EXISTS factions (
+DROP TABLE IF EXISTS factions CASCADE;
+CREATE TABLE factions (
     id SERIAL PRIMARY KEY,
     faction_name VARCHAR NOT NULL,
     description TEXT,
@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS factions (
 --- Location Tables ---------
 
 --- locations: Stores planets, moons, and other settings. ---------
-CREATE TABLE IF NOT EXISTS locations (
+DROP TABLE IF EXISTS locations CASCADE;
+CREATE TABLE locations (
     id SERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
     location_type VARCHAR,
@@ -41,7 +42,8 @@ CREATE TABLE IF NOT EXISTS locations (
 --- Character Tables ---------
 
 --- characters: Stores characters in the film. ---------
-CREATE TABLE IF NOT EXISTS characters (
+DROP TABLE IF EXISTS characters CASCADE;
+CREATE TABLE characters (
     id SERIAL PRIMARY KEY,
     character_name VARCHAR NOT NULL,
     full_name VARCHAR,
@@ -59,7 +61,8 @@ CREATE TABLE IF NOT EXISTS characters (
 --- Vehicle Tables ---------
 
 --- vehicles: Stores ships and other vehicles. ---------
-CREATE TABLE IF NOT EXISTS vehicles (
+DROP TABLE IF EXISTS vehicles CASCADE;
+CREATE TABLE vehicles (
     id SERIAL PRIMARY KEY,
     vehicle_name VARCHAR NOT NULL,
     vehicle_type VARCHAR,
@@ -71,12 +74,12 @@ CREATE TABLE IF NOT EXISTS vehicles (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX IF NOT EXISTS idx_vehicles_faction_id ON vehicles (faction_id);
 
 --- Item Tables ---------
 
 --- items: Stores weapons, artifacts, tech, and merchandise. ---------
-CREATE TABLE IF NOT EXISTS items (
+DROP TABLE IF EXISTS items CASCADE;
+CREATE TABLE items (
     id SERIAL PRIMARY KEY,
     item_name VARCHAR NOT NULL,
     item_type VARCHAR NOT NULL
@@ -89,12 +92,11 @@ CREATE TABLE IF NOT EXISTS items (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX IF NOT EXISTS idx_items_owner_character_id ON items (owner_character_id);
-
 --- Quote Tables ---------
 
 --- quotes: Stores lines of dialogue. ---------
-CREATE TABLE IF NOT EXISTS quotes (
+DROP TABLE IF EXISTS quotes CASCADE;
+CREATE TABLE quotes (
     id SERIAL PRIMARY KEY,
     quote_text TEXT NOT NULL,
     character_id INTEGER REFERENCES characters (id) ON DELETE SET NULL,
@@ -102,12 +104,11 @@ CREATE TABLE IF NOT EXISTS quotes (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX IF NOT EXISTS idx_quotes_character_id ON quotes (character_id);
-
 --- Relationship Tables ---------
 
 --- character_actors: Links a character to the actor(s) who played or voiced them. ---------
-CREATE TABLE IF NOT EXISTS character_actors (
+DROP TABLE IF EXISTS character_actors CASCADE;
+CREATE TABLE character_actors (
     id SERIAL PRIMARY KEY,
     character_id INTEGER NOT NULL REFERENCES characters (id) ON DELETE CASCADE,
     actor_id INTEGER NOT NULL REFERENCES actors (id) ON DELETE CASCADE,
@@ -118,7 +119,8 @@ CREATE TABLE IF NOT EXISTS character_actors (
 );
 
 --- vehicle_crew: Who is aboard a vehicle, and in what role (pilot, co-pilot, captain, ...). ---------
-CREATE TABLE IF NOT EXISTS vehicle_crew (
+DROP TABLE IF EXISTS vehicle_crew CASCADE;
+CREATE TABLE vehicle_crew (
     vehicle_id INTEGER NOT NULL REFERENCES vehicles (id) ON DELETE CASCADE,
     character_id INTEGER NOT NULL REFERENCES characters (id) ON DELETE CASCADE,
     crew_role VARCHAR,
@@ -131,7 +133,8 @@ CREATE TABLE IF NOT EXISTS vehicle_crew (
 --- table pair per entity with one table each. ---------
 
 --- trivia: Stores trivia and behind-the-scenes notes for any entity. ---------
-CREATE TABLE IF NOT EXISTS trivia (
+DROP TABLE IF EXISTS trivia CASCADE;
+CREATE TABLE trivia (
     id SERIAL PRIMARY KEY,
     trivia_kind VARCHAR NOT NULL DEFAULT 'trivia'
         CHECK (trivia_kind IN ('trivia', 'behind_the_scenes')),
@@ -147,7 +150,8 @@ CREATE TABLE IF NOT EXISTS trivia (
 );
 
 --- citations: Stores numbered sources backing any entity's data. ---------
-CREATE TABLE IF NOT EXISTS citations (
+DROP TABLE IF EXISTS citations CASCADE;
+CREATE TABLE citations (
     id SERIAL PRIMARY KEY,
     citation_number INTEGER NOT NULL,
     source_text TEXT NOT NULL,

@@ -39,4 +39,6 @@ class Character(Base):
     quotes: Mapped[list[Quote]] = relationship(back_populates="character")
     items: Mapped[list[Item]] = relationship(back_populates="owner")
     trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.character_id")
-    citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.character_id")
+    citations: Mapped[list[Citation]] = relationship(
+        foreign_keys="Citation.character_id"
+    )

@@ -21,15 +21,12 @@ class Actor(Base):
     __tablename__ = "actors"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    actor_name: Mapped[str] = mapped_column(String)
-    image_url: Mapped[str | None] = mapped_column(String)
-    source_url: Mapped[str | None] = mapped_column(String)
+    actor_name: Mapped[str] = mapped_column(String, unique=True)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     character_links: Mapped[list[CharacterActor]] = relationship(back_populates="actor")
     trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.actor_id")
     citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.actor_id")
-
 
 
 class CharacterActor(Base):
@@ -45,9 +42,7 @@ class CharacterActor(Base):
     character_id: Mapped[int] = mapped_column(
         ForeignKey("characters.id", ondelete="CASCADE")
     )
-    actor_id: Mapped[int] = mapped_column(
-        ForeignKey("actors.id", ondelete="CASCADE")
-    )
+    actor_id: Mapped[int] = mapped_column(ForeignKey("actors.id", ondelete="CASCADE"))
     credit_type: Mapped[str | None] = mapped_column(String)
     notes: Mapped[str | None] = mapped_column(Text)
 

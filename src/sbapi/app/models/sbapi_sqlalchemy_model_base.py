@@ -1,4 +1,5 @@
 """Shared declarative Base for every SBAPI model."""
+
 from sqlalchemy.orm import DeclarativeBase
 
 

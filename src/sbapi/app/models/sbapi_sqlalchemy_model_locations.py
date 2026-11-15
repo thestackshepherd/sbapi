@@ -25,4 +25,6 @@ class Location(Base):
         foreign_keys="Character.homeworld_id", back_populates="homeworld"
     )
     trivia: Mapped[list["Trivia"]] = relationship(foreign_keys="Trivia.location_id")
-    citations: Mapped[list["Citation"]] = relationship(foreign_keys="Citation.location_id")
+    citations: Mapped[list["Citation"]] = relationship(
+        foreign_keys="Citation.location_id"
+    )
