@@ -11,6 +11,6 @@ COPY README.md ./
 COPY src ./src
 RUN uv sync --frozen --no-dev
 
-EXPOSE 8000
+EXPOSE 8080
 
-CMD ["uv", "run", "--no-sync", "gunicorn", "--bind", "0.0.0.0:8000", "sbapi.app.wsgi:app"]
+CMD ["uv", "run", "--no-sync", "gunicorn", "--bind", "0.0.0.0:8080", "sbapi.app.wsgi:app"]

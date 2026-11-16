@@ -17,7 +17,7 @@ def create_app() -> Flask:
     app.extensions["sbapidb_connection"] = SbapiDbConnection()
     app.register_blueprint(characters_bp)
 
-    @app.get("/health")
+    @app.get("/api/health")
     def health():
         with app.extensions["sbapidb_connection"].get_session() as session:
             session.execute(text("SELECT 1"))

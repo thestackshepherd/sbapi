@@ -6,3 +6,7 @@ DATABASE_PORT=5432
 DATABASE_NAME="sbapi_dev_db"
 # Host port Postgres is published on by docker compose (change if 5432 is taken)
 DB_HOST_PORT=5432
+# Host port the nginx proxy is published on (serves / and /api/)
+PROXY_HOST_PORT=8080
+# Number of app replicas behind the proxy
+APP_REPLICAS=3
