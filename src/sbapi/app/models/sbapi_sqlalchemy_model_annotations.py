@@ -10,7 +10,31 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
 
 
-class Trivia(Base):
+class EntityRefMixin:
+    """Nullable FK columns shared by the annotation tables, one per entity type.
+
+    Every annotation row points at exactly one entity; each table's CHECK
+    constraint enforces that.
+    """
+
+    character_id: Mapped[int | None] = mapped_column(
+        ForeignKey("characters.id", ondelete="CASCADE")
+    )
+    planet_id: Mapped[int | None] = mapped_column(
+        ForeignKey("planets.id", ondelete="CASCADE")
+    )
+    vehicle_id: Mapped[int | None] = mapped_column(
+        ForeignKey("vehicles.id", ondelete="CASCADE")
+    )
+    item_id: Mapped[int | None] = mapped_column(
+        ForeignKey("items.id", ondelete="CASCADE")
+    )
+    actor_id: Mapped[int | None] = mapped_column(
+        ForeignKey("actors.id", ondelete="CASCADE")
+    )
+
+
+class Trivia(EntityRefMixin, Base):
     """trivia database table model (trivia and behind-the-scenes notes)"""
 
     __tablename__ = "trivia"
@@ -29,24 +53,9 @@ class Trivia(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     trivia_kind: Mapped[str] = mapped_column(String(2048), server_default="trivia")
     trivia_text: Mapped[str | None] = mapped_column(Text)
-    character_id: Mapped[int | None] = mapped_column(
-        ForeignKey("characters.id", ondelete="CASCADE")
-    )
-    planet_id: Mapped[int | None] = mapped_column(
-        ForeignKey("planets.id", ondelete="CASCADE")
-    )
-    vehicle_id: Mapped[int | None] = mapped_column(
-        ForeignKey("vehicles.id", ondelete="CASCADE")
-    )
-    item_id: Mapped[int | None] = mapped_column(
-        ForeignKey("items.id", ondelete="CASCADE")
-    )
-    actor_id: Mapped[int | None] = mapped_column(
-        ForeignKey("actors.id", ondelete="CASCADE")
-    )
 
 
-class Citation(Base):
+class Citation(EntityRefMixin, Base):
     """citations database table model (numbered sources backing an entity's data)"""
 
     __tablename__ = "citations"
@@ -67,21 +76,6 @@ class Citation(Base):
     citation_number: Mapped[int] = mapped_column(Integer)
     source_text: Mapped[str] = mapped_column(Text)
     source_url: Mapped[str | None] = mapped_column(String(2048))
-    character_id: Mapped[int | None] = mapped_column(
-        ForeignKey("characters.id", ondelete="CASCADE")
-    )
-    planet_id: Mapped[int | None] = mapped_column(
-        ForeignKey("planets.id", ondelete="CASCADE")
-    )
-    vehicle_id: Mapped[int | None] = mapped_column(
-        ForeignKey("vehicles.id", ondelete="CASCADE")
-    )
-    item_id: Mapped[int | None] = mapped_column(
-        ForeignKey("items.id", ondelete="CASCADE")
-    )
-    actor_id: Mapped[int | None] = mapped_column(
-        ForeignKey("actors.id", ondelete="CASCADE")
-    )
     quote_id: Mapped[int | None] = mapped_column(
         ForeignKey("quotes.id", ondelete="CASCADE")
     )
