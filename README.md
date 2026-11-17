@@ -83,11 +83,16 @@ that can't be sourced are left null, never guessed.
 
 The tables are filled by `src/sbapi/app/scripts/database_populate_main.py`,
 installed as a console command. The data it inserts lives in the sibling
-`database_populate_{planets,actors,characters}.py` modules. Run it from the
-repo root so `.env` is found:
+`database_populate_<table>.py` modules: `planets`, `actors`, `characters`,
+`vehicles`, `items`, `quotes`, `character_actors`, `vehicle_crew`, `trivia`,
+and `citations`. Link and annotation rows (character_actors, vehicle_crew,
+trivia, citations, item owners, quote speakers) name the rows they point at
+(e.g. `"character_name": "Lone Starr"`), and the ids are looked up when the
+row is inserted. Run it from the repo root so `.env` is found:
 
 ```sh
-uv run populate   # inserts planets, actors, and characters
+uv run populate   # inserts planets, actors, characters, vehicles, items, quotes,
+                  # character_actors, vehicle_crew, trivia, and citations
 ```
 
 The tables must already exist (see [Local development](#local-development)).
@@ -95,7 +100,10 @@ The tables must already exist (see [Local development](#local-development)).
 loopback port (`DATABASE_HOST=localhost`, `DATABASE_PORT` = `DB_HOST_PORT`),
 not through the proxy.
 The scripts are safe to re-run: a row whose name is already in the table is
-skipped, not duplicated or updated.
+skipped, not duplicated or updated. Link rows are skipped when the same pair
+already exists, trivia and citations when the same text is already attached to
+the same row, and a row whose referenced character, actor, vehicle, or item
+is missing is skipped with a printed warning.
 
 Tests: `uv run pytest`.
 
