@@ -25,7 +25,6 @@ src/sbapi/
     database/
       connection.py            # SQLAlchemy engine setup
       sbapi_devdb_schema.sql   # dev schema: drops and recreates every table
-      sbapi_prod_schema.sql    # production schema
       sbapidb_rebase.sql       # wipes the public schema entirely
     models/                    # SQLAlchemy models
     repositories/              # database queries used by the routes
@@ -63,6 +62,10 @@ docker compose -f sbapi-compose.yaml exec -T db sh -c 'psql -U "$POSTGRES_USER" 
 
 To start from a completely empty database, use
 `docker compose -f sbapi-compose.yaml down -v`.
+
+This is the only schema file. Never run it against a production database: it
+drops every table. Production schema changes will go through Alembic
+migrations (#12) instead of a hand-maintained copy of this file.
 
 Check it is up (the app container also has a healthcheck on this):
 
