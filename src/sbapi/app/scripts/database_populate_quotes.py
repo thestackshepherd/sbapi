@@ -4,6 +4,7 @@ Data for the quotes table (verbatim lines from the 1987 film).
 Populating logic lives in database_populate_main.py. Speakers are referenced by
 character_name and resolved to an id at insert time.
 """
+
 from datetime import UTC, datetime
 
 NOW = datetime.now(UTC)
@@ -81,7 +82,6 @@ QUOTES = [
         "source_url": WIKI + "Yogurt",
         "last_updated": NOW,
     },
-
     # --- Druidia ---
     {
         "quote_text": "Oh, and, if at all possible, try to save the car.",
@@ -89,7 +89,6 @@ QUOTES = [
         "source_url": WIKI + "Roland",
         "last_updated": NOW,
     },
-
     # --- Spaceballs ---
     {
         "quote_text": "I can't make decisions, I'm a president!",
@@ -193,7 +192,6 @@ QUOTES = [
         "source_url": WIKI + "Mega_Maid",
         "last_updated": NOW,
     },
-
     # --- Underworld ---
     {
         "quote_text": "It's not what I want. It's what he wants.",

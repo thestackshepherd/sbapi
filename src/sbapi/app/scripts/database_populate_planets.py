@@ -3,6 +3,7 @@ Data for the planets table (planets, moons, and stations).
 
 Populating logic lives in database_populate_main.py.
 """
+
 from datetime import UTC, datetime
 
 planet_spaceball_description = """Home of the Spaceballs. Has squandered its own air,
@@ -15,7 +16,9 @@ moon_of_vega_description = (
     "Desert moon where the heroes crash-land. Home of Yogurt "
     "and the Dinks; where Lone Starr learns the Schwartz."
 )
-planet_of_the_apes_description = "Where Mega Maid's head crash-lands in the final scene."
+planet_of_the_apes_description = (
+    "Where Mega Maid's head crash-lands in the final scene."
+)
 space_stop_5_description = "Roadside diner where the heroes stop to eat."
 
 NOW = datetime.now(UTC)
@@ -71,4 +74,3 @@ PLANETS = [
         "last_updated": NOW,
     },
 ]
-

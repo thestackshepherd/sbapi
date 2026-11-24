@@ -3,6 +3,7 @@ Data for the characters table.
 
 Populating logic lives in database_populate_main.py.
 """
+
 from datetime import UTC, datetime
 
 NOW = datetime.now(UTC)
@@ -74,7 +75,6 @@ CHARACTERS = [
         "source_url": WIKI + "Yogurt",
         "last_updated": NOW,
     },
-
     # --- Druidia ---
     {
         "character_name": "Roland",
@@ -112,7 +112,6 @@ CHARACTERS = [
         "source_url": WIKIPEDIA,
         "last_updated": NOW,
     },
-
     # --- Spaceballs ---
     {
         "character_name": "Skroob",
@@ -294,7 +293,6 @@ CHARACTERS = [
         "source_url": WIKIPEDIA,
         "last_updated": NOW,
     },
-
     # --- Underworld ---
     {
         "character_name": "Pizza the Hutt",
@@ -320,7 +318,6 @@ CHARACTERS = [
         "source_url": WIKI + "Vinnie",
         "last_updated": NOW,
     },
-
     # --- Moon of Vega ---
     {
         "character_name": "Dinks",
@@ -334,7 +331,6 @@ CHARACTERS = [
         "source_url": WIKIPEDIA,
         "last_updated": NOW,
     },
-
     # --- Cameos ---
     {
         "character_name": "Kane",
@@ -360,7 +356,6 @@ CHARACTERS = [
         "source_url": WIKIPEDIA,
         "last_updated": NOW,
     },
-
     # --- Sequel: Spaceballs: The New One (2027) ---
     {
         "character_name": "Starburst",

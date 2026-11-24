@@ -35,6 +35,4 @@ class Planet(Base):
         foreign_keys="Character.homeworld_id", back_populates="homeworld"
     )
     trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.planet_id")
-    citations: Mapped[list[Citation]] = relationship(
-        foreign_keys="Citation.planet_id"
-    )
+    citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.planet_id")

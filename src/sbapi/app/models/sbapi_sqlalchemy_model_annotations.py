@@ -4,8 +4,6 @@ Each row points at exactly one entity: one nullable FK per entity type, with a
 CHECK that exactly one is set.
 """
 
-from typing import Optional
-
 from sqlalchemy import CheckConstraint, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -19,8 +17,7 @@ class Trivia(Base):
     __table_args__ = (
         CheckConstraint("trivia_kind IN ('trivia', 'behind_the_scenes')"),
         CheckConstraint(
-            "num_nonnulls(character_id, planet_id, vehicle_id, "
-            "item_id, actor_id) = 1"
+            "num_nonnulls(character_id, planet_id, vehicle_id, item_id, actor_id) = 1"
         ),
         Index("idx_trivia_character_id", "character_id"),
         Index("idx_trivia_planet_id", "planet_id"),
@@ -31,20 +28,20 @@ class Trivia(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     trivia_kind: Mapped[str] = mapped_column(String(2048), server_default="trivia")
-    trivia_text: Mapped[str] = mapped_column(Text)
-    character_id: Mapped[Optional[int]] = mapped_column(
+    trivia_text: Mapped[str | None] = mapped_column(Text)
+    character_id: Mapped[ int | None]= mapped_column(
         ForeignKey("characters.id", ondelete="CASCADE")
     )
-    planet_id: Mapped[Optional[int]] = mapped_column(
+    planet_id: Mapped[int | None] = mapped_column(
         ForeignKey("planets.id", ondelete="CASCADE")
     )
-    vehicle_id: Mapped[Optional[int]] = mapped_column(
+    vehicle_id: Mapped[int | None] = mapped_column(
         ForeignKey("vehicles.id", ondelete="CASCADE")
     )
-    item_id: Mapped[Optional[int]] = mapped_column(
+    item_id: Mapped[int | None] = mapped_column(
         ForeignKey("items.id", ondelete="CASCADE")
     )
-    actor_id: Mapped[Optional[int]] = mapped_column(
+    actor_id: Mapped[int | None] = mapped_column(
         ForeignKey("actors.id", ondelete="CASCADE")
     )
 
@@ -69,22 +66,22 @@ class Citation(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     citation_number: Mapped[int] = mapped_column(Integer)
     source_text: Mapped[str] = mapped_column(Text)
-    source_url: Mapped[Optional[str]] = mapped_column(String(2048))
-    character_id: Mapped[Optional[int]] = mapped_column(
+    source_url: Mapped[str | None] = mapped_column(String(2048))
+    character_id: Mapped[int | None] = mapped_column(
         ForeignKey("characters.id", ondelete="CASCADE")
     )
-    planet_id: Mapped[Optional[int]] = mapped_column(
+    planet_id: Mapped[int | None] = mapped_column(
         ForeignKey("planets.id", ondelete="CASCADE")
     )
-    vehicle_id: Mapped[Optional[int]] = mapped_column(
+    vehicle_id: Mapped[int | None] = mapped_column(
         ForeignKey("vehicles.id", ondelete="CASCADE")
     )
-    item_id: Mapped[Optional[int]] = mapped_column(
+    item_id: Mapped[int | None] = mapped_column(
         ForeignKey("items.id", ondelete="CASCADE")
     )
-    actor_id: Mapped[Optional[int]] = mapped_column(
+    actor_id: Mapped[int | None] = mapped_column(
         ForeignKey("actors.id", ondelete="CASCADE")
     )
-    quote_id: Mapped[Optional[int]] = mapped_column(
+    quote_id: Mapped[int | None] = mapped_column(
         ForeignKey("quotes.id", ondelete="CASCADE")
     )

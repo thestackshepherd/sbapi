@@ -7,7 +7,7 @@ CREATE TABLE actors (
     actor_name    VARCHAR(2048) UNIQUE NOT NULL,
     last_updated  TIMESTAMPTZ
 );
-CREATE INDEX CONCURRENTLY idx_actors ON actors (actor_name);
+CREATE INDEX idx_actors ON actors (actor_name);
 
 
 --- planets: Stores planets, moons, and stations. ---------
@@ -24,7 +24,7 @@ CREATE TABLE planets(
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX CONCURRENTLY idx_planets ON planets(name);
+CREATE INDEX idx_planets ON planets(name);
 
 --- characters: Stores characters in the film. ---------
 DROP TABLE IF EXISTS characters CASCADE;
@@ -42,8 +42,8 @@ CREATE TABLE characters (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX CONCURRENTLY idx_characters_name ON characters (character_name);
-CREATE INDEX CONCURRENTLY idx_characters_homeworld_id ON characters (homeworld_id);
+CREATE INDEX idx_characters_name ON characters (character_name);
+CREATE INDEX idx_characters_homeworld_id ON characters (homeworld_id);
 
 --- vehicles: Stores ships and other vehicles. ---------
 DROP TABLE IF EXISTS vehicles CASCADE;
@@ -58,7 +58,7 @@ CREATE TABLE vehicles (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX CONCURRENTLY idx_vehicles_name ON vehicles (vehicle_name);
+CREATE INDEX idx_vehicles_name ON vehicles (vehicle_name);
 
 --- items: Stores weapons, artifacts, tech, and merchandise. ---------
 DROP TABLE IF EXISTS items CASCADE;
@@ -75,8 +75,8 @@ CREATE TABLE items (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX CONCURRENTLY idx_items_name ON items (item_name);
-CREATE INDEX CONCURRENTLY idx_items_owner_character_id ON items (owner_character_id);
+CREATE INDEX idx_items_name ON items (item_name);
+CREATE INDEX idx_items_owner_character_id ON items (owner_character_id);
 
 --- quotes: Stores lines of dialogue. ---------
 DROP TABLE IF EXISTS quotes CASCADE;
@@ -88,7 +88,7 @@ CREATE TABLE quotes (
     last_updated TIMESTAMPTZ
 );
 
-CREATE INDEX CONCURRENTLY idx_quotes_character_id ON quotes (character_id);
+CREATE INDEX idx_quotes_character_id ON quotes (character_id);
 
 --- character_actors: Links a character to the actor(s) who played or voiced them. ---------
 DROP TABLE IF EXISTS character_actors CASCADE;
@@ -102,7 +102,7 @@ CREATE TABLE character_actors (
     UNIQUE (character_id, actor_id)
 );
 
-CREATE INDEX CONCURRENTLY idx_character_actors_actor_id ON character_actors (actor_id);
+CREATE INDEX idx_character_actors_actor_id ON character_actors (actor_id);
 
 --- vehicle_crew: Who is aboard a vehicle, and in what role (pilot, co-pilot, captain, ...). ---------
 DROP TABLE IF EXISTS vehicle_crew CASCADE;
@@ -113,7 +113,7 @@ CREATE TABLE vehicle_crew (
     PRIMARY KEY (vehicle_id, character_id)
 );
 
-CREATE INDEX CONCURRENTLY idx_vehicle_crew_character_id ON vehicle_crew (character_id);
+CREATE INDEX idx_vehicle_crew_character_id ON vehicle_crew (character_id);
 
 --- trivia: Stores trivia and behind-the-scenes notes for any entity. ---------
 DROP TABLE IF EXISTS trivia CASCADE;
@@ -131,11 +131,11 @@ CREATE TABLE trivia (
                         item_id, actor_id) = 1)
 );
 
-CREATE INDEX CONCURRENTLY idx_trivia_character_id ON trivia (character_id);
-CREATE INDEX CONCURRENTLY idx_trivia_planet_id ON trivia (planet_id);
-CREATE INDEX CONCURRENTLY idx_trivia_vehicle_id ON trivia (vehicle_id);
-CREATE INDEX CONCURRENTLY idx_trivia_item_id ON trivia (item_id);
-CREATE INDEX CONCURRENTLY idx_trivia_actor_id ON trivia (actor_id);
+CREATE INDEX idx_trivia_character_id ON trivia (character_id);
+CREATE INDEX idx_trivia_planet_id ON trivia (planet_id);
+CREATE INDEX idx_trivia_vehicle_id ON trivia (vehicle_id);
+CREATE INDEX idx_trivia_item_id ON trivia (item_id);
+CREATE INDEX idx_trivia_actor_id ON trivia (actor_id);
 
 --- citations: Stores numbered sources backing any entity's data. ---------
 DROP TABLE IF EXISTS citations CASCADE;
@@ -154,9 +154,9 @@ CREATE TABLE citations (
                         item_id, actor_id, quote_id) = 1)
 );
 
-CREATE INDEX CONCURRENTLY idx_citations_character_id ON citations (character_id);
-CREATE INDEX CONCURRENTLY idx_citations_planet_id ON citations (planet_id);
-CREATE INDEX CONCURRENTLY idx_citations_vehicle_id ON citations (vehicle_id);
-CREATE INDEX CONCURRENTLY idx_citations_item_id ON citations (item_id);
-CREATE INDEX CONCURRENTLY idx_citations_actor_id ON citations (actor_id);
-CREATE INDEX CONCURRENTLY idx_citations_quote_id ON citations (quote_id);
+CREATE INDEX idx_citations_character_id ON citations (character_id);
+CREATE INDEX idx_citations_planet_id ON citations (planet_id);
+CREATE INDEX idx_citations_vehicle_id ON citations (vehicle_id);
+CREATE INDEX idx_citations_item_id ON citations (item_id);
+CREATE INDEX idx_citations_actor_id ON citations (actor_id);
+CREATE INDEX idx_citations_quote_id ON citations (quote_id);

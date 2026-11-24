@@ -1,6 +1,7 @@
 """
 SQLAlchemy ORM Model file represents the Actors table in the sbapi database.
 """
+
 from datetime import datetime
 from typing import TYPE_CHECKING
 

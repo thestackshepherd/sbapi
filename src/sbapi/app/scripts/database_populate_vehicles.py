@@ -3,6 +3,7 @@ Data for the vehicles table (ships and other vehicles).
 
 Populating logic lives in database_populate_main.py.
 """
+
 from datetime import UTC, datetime
 
 NOW = datetime.now(UTC)
@@ -54,7 +55,6 @@ VEHICLES = [
         "source_url": WIKI + "Honeymoon_Cruise",
         "last_updated": NOW,
     },
-
     # --- Spaceballs ---
     {
         "vehicle_name": "Spaceball One",  # wiki title is "Spaceball I"
@@ -74,7 +74,6 @@ VEHICLES = [
         "source_url": WIKI + "Mega_Maid",
         "last_updated": NOW,
     },
-
     # --- Sequel: Spaceballs: The New One (2027) ---
     {
         "vehicle_name": "Bladder Ship",
