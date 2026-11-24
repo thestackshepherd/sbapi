@@ -48,13 +48,13 @@ CREATE INDEX CONCURRENTLY idx_characters_homeworld_id ON characters (homeworld_i
 --- vehicles: Stores ships and other vehicles. ---------
 DROP TABLE IF EXISTS vehicles CASCADE;
 CREATE TABLE vehicles (
-    id SERIAL PRIMARY KEY,
+    id SERIAL    PRIMARY KEY,
     vehicle_name VARCHAR(2048) NOT NULL,
     vehicle_type VARCHAR(2048),
-    description TEXT,
-    parody_of VARCHAR(2048),
-    image_url VARCHAR(2048),
-    source_url VARCHAR(2048),
+    description  TEXT,
+    parody_of    VARCHAR(2048),
+    image_url    VARCHAR(2048),
+    source_url   VARCHAR(2048),
     last_updated TIMESTAMPTZ
 );
 
