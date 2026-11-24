@@ -1,5 +1,5 @@
 """
-Import every model so they all register on the shared Base.metadata.
+sbapi sqlalchemy models module.
 """
 
 from sbapi.app.models.sbapi_sqlalchemy_model_actors import Actor, CharacterActor

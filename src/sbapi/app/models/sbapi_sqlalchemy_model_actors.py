@@ -33,7 +33,9 @@ class Actor(Base):
     actor_name: Mapped[str] = mapped_column(String(2048), unique=True)
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
-    character_links: Mapped[list[CharacterActor]] = relationship(back_populates="actor")
+    character_links: Mapped[list[CharacterActor]] = relationship(
+        back_populates="actor", passive_deletes=True
+    )
 
 
 class CharacterActor(Base):

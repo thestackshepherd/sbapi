@@ -1,10 +1,18 @@
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import DateTime, ForeignKey, Index, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
+
+if TYPE_CHECKING:
+    from sbapi.app.models.sbapi_sqlalchemy_model_actors import CharacterActor
+    from sbapi.app.models.sbapi_sqlalchemy_model_annotations import Citation, Trivia
+    from sbapi.app.models.sbapi_sqlalchemy_model_items import Item
+    from sbapi.app.models.sbapi_sqlalchemy_model_planets import Planet
+    from sbapi.app.models.sbapi_sqlalchemy_model_quotes import Quote
+    from sbapi.app.models.sbapi_sqlalchemy_model_vehicles import VehicleCrew
 
 
 class Character(Base):
@@ -32,11 +40,21 @@ class Character(Base):
     homeworld: Mapped[Planet | None] = relationship(
         foreign_keys=[homeworld_id], back_populates="natives"
     )
-    actor_links: Mapped[list[CharacterActor]] = relationship(back_populates="character")
-    crew_roles: Mapped[list[VehicleCrew]] = relationship(back_populates="character")
-    quotes: Mapped[list[Quote]] = relationship(back_populates="character")
-    items: Mapped[list[Item]] = relationship(back_populates="owner")
-    trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.character_id")
+    actor_links: Mapped[list[CharacterActor]] = relationship(
+        back_populates="character", passive_deletes=True
+    )
+    crew_roles: Mapped[list[VehicleCrew]] = relationship(
+        back_populates="character", passive_deletes=True
+    )
+    quotes: Mapped[list[Quote]] = relationship(
+        back_populates="character", passive_deletes=True
+    )
+    items: Mapped[list[Item]] = relationship(
+        back_populates="owner", passive_deletes=True
+    )
+    trivia: Mapped[list[Trivia]] = relationship(
+        foreign_keys="Trivia.character_id", passive_deletes=True
+    )
     citations: Mapped[list[Citation]] = relationship(
-        foreign_keys="Citation.character_id"
+        foreign_keys="Citation.character_id", passive_deletes=True
     )

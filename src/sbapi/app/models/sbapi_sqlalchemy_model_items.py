@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     CheckConstraint,
@@ -13,6 +13,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from sbapi.app.models.sbapi_sqlalchemy_model_base import Base
+
+if TYPE_CHECKING:
+    from sbapi.app.models.sbapi_sqlalchemy_model_annotations import Citation, Trivia
+    from sbapi.app.models.sbapi_sqlalchemy_model_characters import Character
 
 
 class Item(Base):
@@ -40,5 +44,9 @@ class Item(Base):
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     owner: Mapped[Character | None] = relationship(back_populates="items")
-    trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.item_id")
-    citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.item_id")
+    trivia: Mapped[list[Trivia]] = relationship(
+        foreign_keys="Trivia.item_id", passive_deletes=True
+    )
+    citations: Mapped[list[Citation]] = relationship(
+        foreign_keys="Citation.item_id", passive_deletes=True
+    )

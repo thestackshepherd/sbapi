@@ -29,7 +29,7 @@ class Trivia(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     trivia_kind: Mapped[str] = mapped_column(String(2048), server_default="trivia")
     trivia_text: Mapped[str | None] = mapped_column(Text)
-    character_id: Mapped[ int | None]= mapped_column(
+    character_id: Mapped[int | None] = mapped_column(
         ForeignKey("characters.id", ondelete="CASCADE")
     )
     planet_id: Mapped[int | None] = mapped_column(

@@ -32,7 +32,13 @@ class Planet(Base):
     last_updated: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
     natives: Mapped[list[Character]] = relationship(
-        foreign_keys="Character.homeworld_id", back_populates="homeworld"
+        foreign_keys="Character.homeworld_id",
+        back_populates="homeworld",
+        passive_deletes=True,
     )
-    trivia: Mapped[list[Trivia]] = relationship(foreign_keys="Trivia.planet_id")
-    citations: Mapped[list[Citation]] = relationship(foreign_keys="Citation.planet_id")
+    trivia: Mapped[list[Trivia]] = relationship(
+        foreign_keys="Trivia.planet_id", passive_deletes=True
+    )
+    citations: Mapped[list[Citation]] = relationship(
+        foreign_keys="Citation.planet_id", passive_deletes=True
+    )
